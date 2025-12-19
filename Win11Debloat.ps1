@@ -80,11 +80,11 @@ param (
 
 # Show error if current powershell environment is limited by security policies
 if ($ExecutionContext.SessionState.LanguageMode -ne "FullLanguage") {
-    Write-Host "Error: Win11Debloat is unable to run on your system, powershell execution is restricted by security policies" -ForegroundColor Red
+    Write-Host "错误: Win11Debloat 无法在您的系统上运行, powershell 执行受到安全政策的限制" -ForegroundColor Red
     AwaitKeyToExit
 }
 
-# Log script output to 'Win11Debloat.log' at the specified path
+# 在指定路径上将脚本输出到 'Win11Debloat.log' 文件夹
 if ($LogPath -and (Test-Path $LogPath)) {
     Start-Transcript -Path "$LogPath/Win11Debloat.log" -Append -IncludeInvocationHeader -Force | Out-Null
 }
@@ -102,12 +102,12 @@ else {
 
 
 
-# Shows application selection form that allows the user to select what apps they want to remove or keep
+# 显示应用程序选择表单，允许用户选择他们想要删除或保留的应用程序
 function ShowAppSelectionForm {
     [reflection.assembly]::loadwithpartialname("System.Windows.Forms") | Out-Null
     [reflection.assembly]::loadwithpartialname("System.Drawing") | Out-Null
 
-    # Initialise form objects
+    # 初始化表单对象
     $form = New-Object System.Windows.Forms.Form
     $label = New-Object System.Windows.Forms.Label
     $button1 = New-Object System.Windows.Forms.Button
@@ -120,11 +120,11 @@ function ShowAppSelectionForm {
 
     $script:selectionBoxIndex = -1
 
-    # saveButton eventHandler
+    # saveButton 事件处理程序
     $handler_saveButton_Click= 
     {
         if ($selectionBox.CheckedItems -contains "Microsoft.WindowsStore" -and -not $Silent) {
-            $warningSelection = [System.Windows.Forms.Messagebox]::Show('Are you sure you wish to uninstall the Microsoft Store? This app cannot easily be reinstalled.', 'Are you sure?', 'YesNo', 'Warning')
+            $warningSelection = [System.Windows.Forms.Messagebox]::Show('您确定要卸载 Microsoft Store 吗? 此应用程序无法轻易重新安装.', '你确定吗?', 'YesNo', 'Warning')
         
             if ($warningSelection -eq 'No') {
                 return
@@ -133,7 +133,7 @@ function ShowAppSelectionForm {
 
         $script:SelectedApps = $selectionBox.CheckedItems
 
-        # Create file that stores selected apps if it doesn't exist
+        # 如果所选应用程序不存在,请创建存储文件
         if (-not (Test-Path "$PSScriptRoot/CustomAppsList")) {
             $null = New-Item "$PSScriptRoot/CustomAppsList"
         }
@@ -144,7 +144,7 @@ function ShowAppSelectionForm {
         $form.Close()
     }
 
-    # cancelButton eventHandler
+    # cancelButton 事件处理程序
     $handler_cancelButton_Click= 
     {
         $form.Close()
@@ -189,10 +189,10 @@ function ShowAppSelectionForm {
 
     $load_Apps=
     {
-        # Correct the initial state of the form to prevent the .Net maximized form issue
+        # 更正表单的初始状态,以防止.Net 最大化表单问题
         $form.WindowState = $initialFormWindowState
 
-        # Reset state to default before loading appslist again
+        # 在再次加载应用程序列表之前,将状态重置为默认状态
         $script:selectionBoxIndex = -1
         $checkUncheckCheckBox.Checked = $False
 
