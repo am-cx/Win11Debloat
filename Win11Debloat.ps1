@@ -196,78 +196,78 @@ function ShowAppSelectionForm {
         $script:selectionBoxIndex = -1
         $checkUncheckCheckBox.Checked = $False
 
-        # Show loading indicator
+        # 显示加载指示器
         $loadingLabel.Visible = $true
         $form.Refresh()
 
-        # Clear selectionBox before adding any new items
+        # 在添加任何新项目之前清除选择框
         $selectionBox.Items.Clear()
 
-        # Set filePath where Appslist can be found
+        # 设置可以找到Appslist的文件路径
         $appsFile = "$PSScriptRoot/Appslist.txt"
         $listOfApps = ""
 
         if ($onlyInstalledCheckBox.Checked -and ($script:wingetInstalled -eq $true)) {
-            # Attempt to get a list of installed apps via winget, times out after 10 seconds
+            # 尝试通过winget获取已安装应用程序的列表,10秒后超时
             $job = Start-Job { return winget list --accept-source-agreements --disable-interactivity }
             $jobDone = $job | Wait-Job -TimeOut 10
 
             if (-not $jobDone) {
-                # Show error that the script was unable to get list of apps from winget
-                [System.Windows.MessageBox]::Show('Unable to load list of installed apps via winget, some apps may not be displayed in the list.', 'Error', 'Ok', 'Error')
+                # 显示错误，脚本无法从 winget 获取应用程序列表
+                [System.Windows.MessageBox]::Show('无法通过 winget 加载已安装应用程序的列表，某些应用程序可能不会显示在列表中.', '错误', '正确', '错误')
             }
             else {
-                # Add output of job (list of apps) to $listOfApps
+                # 将任务的输出 (应用程序) 添加到 $listOfApps
                 $listOfApps = Receive-Job -Job $job
             }
         }
 
-        # Go through appslist and add items one by one to the selectionBox
+        # 浏览应用程序列表，并将项目逐个添加到 selectionBox
         Foreach ($app in (Get-Content -Path $appsFile | Where-Object { $_ -notmatch '^\s*$' -and $_ -notmatch '^#  .*' -and $_ -notmatch '^# -* #' } )) { 
             $appChecked = $true
 
-            # Remove first # if it exists and set appChecked to false
+            # 如果存在,请删除第一个 # ,并将 appChecked 设置为 false
             if ($app.StartsWith('#')) {
                 $app = $app.TrimStart("#")
                 $appChecked = $false
             }
 
-            # Remove any comments from the Appname
+            # 从应用程序名称中删除任何注释
             if (-not ($app.IndexOf('#') -eq -1)) {
                 $app = $app.Substring(0, $app.IndexOf('#'))
             }
             
-            # Remove leading and trailing spaces and `*` characters from Appname
+            # 从 Appname 中删除前导和后导空格以及`*`字符
             $app = $app.Trim()
             $appString = $app.Trim('*')
 
-            # Make sure appString is not empty
+            # 确保 appString 不是空的
             if ($appString.length -gt 0) {
                 if ($onlyInstalledCheckBox.Checked) {
-                    # onlyInstalledCheckBox is checked, check if app is installed before adding it to selectionBox
+                    # 如果 onlyInstalledCheckBox 被选中,在将其添加到 selectionBox 之前,请检查应用程序是否已安装
                     if (-not ($listOfApps -like ("*$appString*")) -and -not (Get-AppxPackage -Name $app)) {
-                        # App is not installed, continue with next item
+                        # 应用程序未安装,继续下一个项目
                         continue
                     }
                     if (($appString -eq "Microsoft.Edge") -and -not ($listOfApps -like "* Microsoft.Edge *")) {
-                        # App is not installed, continue with next item
+                        # 应用程序未安装,继续下一个项目
                         continue
                     }
                 }
 
-                # Add the app to the selectionBox and set it's checked status
+                # 将应用程序添加到 selectionBox,并设置其已检查状态
                 $selectionBox.Items.Add($appString, $appChecked) | Out-Null
             }
         }
         
-        # Hide loading indicator
+        # 隐藏加载指示器
         $loadingLabel.Visible = $False
 
-        # Sort selectionBox alphabetically
+        # 按字母顺序对 selectionBox 进行排序
         $selectionBox.Sorted = $True
     }
 
-    $form.Text = "Win11Debloat Application Selection"
+    $form.Text = "Win11Debloat 应用程序选择"
     $form.Name = "appSelectionForm"
     $form.DataBindings.DefaultDataSourceUpdateMode = 0
     $form.ClientSize = New-Object System.Drawing.Size(400,502)
@@ -277,7 +277,7 @@ function ShowAppSelectionForm {
     $button1.TabIndex = 4
     $button1.Name = "saveButton"
     $button1.UseVisualStyleBackColor = $True
-    $button1.Text = "Confirm"
+    $button1.Text = "确定"
     $button1.Location = New-Object System.Drawing.Point(27,472)
     $button1.Size = New-Object System.Drawing.Size(75,23)
     $button1.DataBindings.DefaultDataSourceUpdateMode = 0
@@ -289,7 +289,7 @@ function ShowAppSelectionForm {
     $button2.Name = "cancelButton"
     $button2.DialogResult = [System.Windows.Forms.DialogResult]::Cancel
     $button2.UseVisualStyleBackColor = $True
-    $button2.Text = "Cancel"
+    $button2.Text = "取消"
     $button2.Location = New-Object System.Drawing.Point(129,472)
     $button2.Size = New-Object System.Drawing.Size(75,23)
     $button2.DataBindings.DefaultDataSourceUpdateMode = 0
@@ -300,13 +300,13 @@ function ShowAppSelectionForm {
     $label.Location = New-Object System.Drawing.Point(13,5)
     $label.Size = New-Object System.Drawing.Size(400,14)
     $Label.Font = 'Microsoft Sans Serif,8'
-    $label.Text = 'Check apps that you wish to remove, uncheck apps that you wish to keep'
+    $label.Text = '选中您希望删除的应用程序,取消选中您希望保留的应用程序'
 
     $form.Controls.Add($label)
 
     $loadingLabel.Location = New-Object System.Drawing.Point(16,46)
     $loadingLabel.Size = New-Object System.Drawing.Size(300,418)
-    $loadingLabel.Text = 'Loading apps...'
+    $loadingLabel.Text = '正在加载应用程序...'
     $loadingLabel.BackColor = "White"
     $loadingLabel.Visible = $false
 
@@ -315,7 +315,7 @@ function ShowAppSelectionForm {
     $onlyInstalledCheckBox.TabIndex = 6
     $onlyInstalledCheckBox.Location = New-Object System.Drawing.Point(230,474)
     $onlyInstalledCheckBox.Size = New-Object System.Drawing.Size(150,20)
-    $onlyInstalledCheckBox.Text = 'Only show installed apps'
+    $onlyInstalledCheckBox.Text = '仅显示已安装的应用程序'
     $onlyInstalledCheckBox.add_CheckedChanged($load_Apps)
 
     $form.Controls.Add($onlyInstalledCheckBox)
@@ -323,7 +323,7 @@ function ShowAppSelectionForm {
     $checkUncheckCheckBox.TabIndex = 7
     $checkUncheckCheckBox.Location = New-Object System.Drawing.Point(16,22)
     $checkUncheckCheckBox.Size = New-Object System.Drawing.Size(150,20)
-    $checkUncheckCheckBox.Text = 'Check/Uncheck all'
+    $checkUncheckCheckBox.Text = '全选/全不选'
     $checkUncheckCheckBox.add_CheckedChanged($check_All)
 
     $form.Controls.Add($checkUncheckCheckBox)
@@ -339,21 +339,21 @@ function ShowAppSelectionForm {
 
     $form.Controls.Add($selectionBox)
 
-    # Save the initial state of the form
+    # 保存表单的初始状态
     $initialFormWindowState = $form.WindowState
 
-    # Load apps into selectionBox
+    # 将应用加载到 selectionBox
     $form.add_Load($load_Apps)
 
-    # Focus selectionBox when form opens
+    # 表单打开时聚焦 selectionBox
     $form.Add_Shown({$form.Activate(); $selectionBox.Focus()})
 
-    # Show the Form
+    # 显示表单
     return $form.ShowDialog()
 }
 
 
-# Returns list of apps from the specified file, it trims the app names and removes any comments
+# 從指定檔案中返回應用程式列表,它修剪應用程式名稱並刪除任何評論
 function ReadAppslistFromFile {
     param (
         $appsFilePath
@@ -361,14 +361,14 @@ function ReadAppslistFromFile {
 
     $appsList = @()
 
-    # Get list of apps from file at the path provided, and remove them one by one
+    # 从提供路径的文件中获取应用程序列表,并逐一删除它们
     Foreach ($app in (Get-Content -Path $appsFilePath | Where-Object { $_ -notmatch '^#.*' -and $_ -notmatch '^\s*$' } )) { 
-        # Remove any comments from the Appname
+        # 从应用名称中移除所有注释
         if (-not ($app.IndexOf('#') -eq -1)) {
             $app = $app.Substring(0, $app.IndexOf('#'))
         }
 
-        # Remove any spaces before and after the Appname
+        # 移除应用名称之前和之后的任何空格
         $app = $app.Trim()
         
         $appString = $app.Trim('*')
@@ -379,40 +379,40 @@ function ReadAppslistFromFile {
 }
 
 
-# Removes apps specified during function call from all user accounts and from the OS image.
+# 移除函数调用期间指定的所有用户账户和操作系统镜像中的应用.
 function RemoveApps {
     param (
         $appslist
     )
 
     Foreach ($app in $appsList) { 
-        Write-Output "Attempting to remove $app..."
+        Write-Output "正在尝试移除 $app..."
 
-        # Use winget only to remove OneDrive and Edge
+        # 仅使用 winget 删除 OneDrive 和 Edge
         if (($app -eq "Microsoft.OneDrive") -or ($app -eq "Microsoft.Edge")) {
             if ($script:wingetInstalled -eq $false) {
-                Write-Host "Error: WinGet is either not installed or is outdated, $app could not be removed" -ForegroundColor Red
+                Write-Host "错误: WinGet 未安装或已过时,无法移除 $app" -ForegroundColor Red
                 continue
             }
 
             $appName = $app -replace '\.', '_'
 
-            # Uninstall app via winget, or create a scheduled task to uninstall it later
-            if ($script:Params.ContainsKey("User")) {
-                RegImport "Adding scheduled task to uninstall $app for user $(GetUserName)..." "Uninstall_$($appName).reg"
+            # 通过 winget 卸载应用程序,或创建计划任务以稍后卸载它
+            if ($script:Params.ContainsKey("使用者")) {
+                RegImport "添加要卸载的预定任务 $app for user $(GetUserName)..." "卸载_$($appName).reg"
             }
-            elseif ($script:Params.ContainsKey("Sysprep")) {
-                RegImport "Adding scheduled task to uninstall $app after new users log in..." "Uninstall_$($appName).reg"
+            elseif ($script:Params.ContainsKey("系统准备")) {
+                RegImport "添加要卸载的预定任务 $app 新用户登录后..." "卸载_$($appName).reg"
             }
             else {
                 Strip-Progress -ScriptBlock { winget uninstall --accept-source-agreements --disable-interactivity --id $app } | Tee-Object -Variable wingetOutput
             }
 
-            If (($app -eq "Microsoft.Edge") -and (Select-String -InputObject $wingetOutput -Pattern "Uninstall failed with exit code")) {
-                Write-Host "Unable to uninstall Microsoft Edge via Winget" -ForegroundColor Red
+            If (($app -eq "Microsoft.Edge") -and (Select-String -InputObject $wingetOutput -Pattern "卸载失败，退出")) {
+                Write-Host "无法通过 Winget 卸载 Microsoft Edge" -ForegroundColor Red
                 Write-Output ""
 
-                if ($( Read-Host -Prompt "Would you like to forcefully uninstall Edge? NOT RECOMMENDED! (y/n)" ) -eq 'y') {
+                if ($( Read-Host -Prompt "您想强行卸载 Microsoft Edge 吗? 不推荐! (y/n)" ) -eq 'y') {
                     Write-Output ""
                     ForceRemoveEdge
                 }
@@ -421,30 +421,30 @@ function RemoveApps {
             continue
         }
 
-        # Use Remove-AppxPackage to remove all other apps
+        # 使用 Remove-AppxPackage 删除所有其他应用程序
         $app = '*' + $app + '*'
 
-        # Remove installed app for all existing users
+        # 为所有现有用户删除已安装的应用程序
         try {
             Get-AppxPackage -Name $app -AllUsers | Remove-AppxPackage -AllUsers -ErrorAction Continue
 
             if ($DebugPreference -ne "SilentlyContinue") {
-                Write-Host "Removed $app for all users" -ForegroundColor DarkGray
+                Write-Host "已为所有用户移除 $app" -ForegroundColor DarkGray
             }
         }
         catch {
             if ($DebugPreference -ne "SilentlyContinue") {
-                Write-Host "Unable to remove $app for all users" -ForegroundColor Yellow
+                Write-Host "无法为所有用户移除 $app" -ForegroundColor Yellow
                 Write-Host $psitem.Exception.StackTrace -ForegroundColor Gray
             }
         }
 
-        # Remove provisioned app from OS image, so the app won't be installed for any new users
+        # 从操作系统映像中删除已配置的应用程序,因此不会为任何新用户安装该应用程序
         try {
             Get-AppxProvisionedPackage -Online | Where-Object { $_.PackageName -like $app } | ForEach-Object { Remove-ProvisionedAppxPackage -Online -AllUsers -PackageName $_.PackageName }
         }
         catch {
-            Write-Host "Unable to remove $app from windows image" -ForegroundColor Yellow
+            Write-Host "无法从windows图像中删除 $app" -ForegroundColor Yellow
             Write-Host $psitem.Exception.StackTrace -ForegroundColor Gray
         }
     }
@@ -453,28 +453,28 @@ function RemoveApps {
 }
 
 
-# Forcefully removes Microsoft Edge using it's uninstaller
+# 使用卸载程序强制删除 Microsoft Edge
 function ForceRemoveEdge {
     # Based on work from loadstring1 & ave9858
-    Write-Output "> Forcefully uninstalling Microsoft Edge..."
+    Write-Output "> 正在强制卸载 Microsoft Edge..."
 
     $regView = [Microsoft.Win32.RegistryView]::Registry32
     $hklm = [Microsoft.Win32.RegistryKey]::OpenBaseKey([Microsoft.Win32.RegistryHive]::LocalMachine, $regView)
     $hklm.CreateSubKey('SOFTWARE\Microsoft\EdgeUpdateDev').SetValue('AllowUninstall', '')
 
-    # Create stub (Creating this somehow allows uninstalling Edge)
+    # 创建存根 (创建此文件可以卸载 Edge)
     $edgeStub = "$env:SystemRoot\SystemApps\Microsoft.MicrosoftEdge_8wekyb3d8bbwe"
     New-Item $edgeStub -ItemType Directory | Out-Null
     New-Item "$edgeStub\MicrosoftEdge.exe" | Out-Null
 
-    # Remove edge
+    # 移除 edge
     $uninstallRegKey = $hklm.OpenSubKey('SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Microsoft Edge')
     if ($null -ne $uninstallRegKey) {
-        Write-Output "Running uninstaller..."
+        Write-Output "运行卸载程序..."
         $uninstallString = $uninstallRegKey.GetValue('UninstallString') + ' --force-uninstall'
         Start-Process cmd.exe "/c $uninstallString" -WindowStyle Hidden -Wait
 
-        Write-Output "Removing leftover files..."
+        Write-Output "正在移除残留文件..."
 
         $edgePaths = @(
             "$env:ProgramData\Microsoft\Windows\Start Menu\Programs\Microsoft Edge.lnk",
@@ -489,44 +489,44 @@ function ForceRemoveEdge {
         foreach ($path in $edgePaths) {
             if (Test-Path -Path $path) {
                 Remove-Item -Path $path -Force -Recurse -ErrorAction SilentlyContinue
-                Write-Host "  Removed $path" -ForegroundColor DarkGray
+                Write-Host "  已移除 $path" -ForegroundColor DarkGray
             }
         }
 
-        Write-Output "Cleaning up registry..."
+        Write-Output "正在清理注册表..."
 
-        # Remove MS Edge from autostart
+        # 从自动启动中移除 MS Edge
         reg delete "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run" /v "MicrosoftEdgeAutoLaunch_A9F6DCE4ABADF4F51CF45CD7129E3C6C" /f *>$null
         reg delete "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run" /v "Microsoft Edge Update" /f *>$null
         reg delete "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run" /v "MicrosoftEdgeAutoLaunch_A9F6DCE4ABADF4F51CF45CD7129E3C6C" /f *>$null
         reg delete "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run" /v "Microsoft Edge Update" /f *>$null
 
-        Write-Output "Microsoft Edge was uninstalled"
+        Write-Output "Microsoft Edge 已卸载"
     }
     else {
         Write-Output ""
-        Write-Host "Error: Unable to forcefully uninstall Microsoft Edge, uninstaller could not be found" -ForegroundColor Red
+        Write-Host "错误: 无法强制卸载 Microsoft Edge,找不到卸载程序" -ForegroundColor Red
     }
     
     Write-Output ""
 }
 
 
-# Execute provided command and strips progress spinners/bars from console output
+# 执行提供的命令，并从控制台输出中剥离进度旋转器/条
 function Strip-Progress {
     param(
         [ScriptBlock]$ScriptBlock
     )
 
-    # Regex pattern to match spinner characters and progress bar patterns
+    # 正模式模式与旋转字符和进度条模式相匹配
     $progressPattern = 'Γû[Æê]|^\s+[-\\|/]\s+$'
 
-    # Corrected regex pattern for size formatting, ensuring proper capture groups are utilized
+    # 更正了大小格式的正则表达式模式,确保使用正确的捕获组
     $sizePattern = '(\d+(\.\d{1,2})?)\s+(B|KB|MB|GB|TB|PB) /\s+(\d+(\.\d{1,2})?)\s+(B|KB|MB|GB|TB|PB)'
 
     & $ScriptBlock 2>&1 | ForEach-Object {
         if ($_ -is [System.Management.Automation.ErrorRecord]) {
-            "ERROR: $($_.Exception.Message)"
+            "错误: $($_.Exception.Message)"
         }
         else {
             $line = $_ -replace $progressPattern, '' -replace $sizePattern, ''
@@ -538,7 +538,7 @@ function Strip-Progress {
 }
 
 
-# Check if this machine supports S0 Modern Standby power state. Returns true if S0 Modern Standby is supported, false otherwise.
+# 检查这台机器是否支持 S0 现代待机电源状态.如果支持 S0 Modern Standby,则返回true,否则返回false.
 function CheckModernStandbySupport {
     $count = 0
 
@@ -556,9 +556,9 @@ function CheckModernStandbySupport {
         }
     }
     catch {
-        Write-Host "Error: Unable to check for S0 Modern Standby support, powercfg command failed" -ForegroundColor Red
+        Write-Host "错误: 无法检查 S0 现代待机支持，powercfg 命令失败" -ForegroundColor Red
         Write-Host ""
-        Write-Host "Press any key to continue..."
+        Write-Host "按任意键继续..."
         $null = [System.Console]::ReadKey()
         return $true
     }
@@ -567,7 +567,7 @@ function CheckModernStandbySupport {
 }
 
 
-# Returns the directory path of the specified user, exits script if user path can't be found
+# 返回指定用户的目录路径,如果找不到用户路径,则退出脚本
 function GetUserDirectory {
     param (
         $userName,
@@ -591,16 +591,16 @@ function GetUserDirectory {
         }
     }
     catch {
-        Write-Host "Error: Something went wrong when trying to find the user directory path for user $userName. Please ensure the user exists on this system." -ForegroundColor Red
+        Write-Host "错误:尝试查找用户的用户目录路径时出错 $userName. 请确保用户在此系统上存在." -ForegroundColor Red
         AwaitKeyToExit
     }
 
-    Write-Host "Error: Unable to find user directory path for user $userName" -ForegroundColor Red
+    Write-Host "错误: 无法找到用户的用户目录路径 $userName" -ForegroundColor Red
     AwaitKeyToExit
 }
 
 
-# Import & execute regfile
+# 导入和执行 regfile
 function RegImport {
     param (
         $message,
@@ -632,24 +632,24 @@ function RegImport {
 }
 
 
-# Restart the Windows Explorer process
+# 重新启动 Windows 资源管理器进程
 function RestartExplorer {
     if ($script:Params.ContainsKey("Sysprep") -or $script:Params.ContainsKey("User") -or $script:Params.ContainsKey("NoRestartExplorer")) {
         return
     }
 
-    Write-Output "> Restarting Windows Explorer process to apply all changes... (This may cause some flickering)"
+    Write-Output "> 重新启动 Windows 资源管理器进程以应用所有更改... (这可能会导致一些闪烁)"
 
     if ($script:Params.ContainsKey("DisableMouseAcceleration")) {
-        Write-Host "Warning: The Enhance Pointer Precision setting changes will only take effect after a reboot" -ForegroundColor Yellow
+        Write-Host "警告:增强指针精度设置更改仅在重新启动后生效" -ForegroundColor Yellow
     }
 
     if ($script:Params.ContainsKey("DisableStickyKeys")) {
-        Write-Host "Warning: The Sticky Keys setting changes will only take effect after a reboot" -ForegroundColor Yellow
+        Write-Host "警告: 粘性键设置更改只有在重新启动后才会生效" -ForegroundColor Yellow
     }
 
     if ($script:Params.ContainsKey("DisableAnimations")) {
-        Write-Host "Warning: Animations will only be disabled after a reboot" -ForegroundColor Yellow
+        Write-Host "警告: 只有在重启后才会禁用动画" -ForegroundColor Yellow
     }
 
     # Only restart if the powershell process matches the OS architecture.
@@ -658,7 +658,7 @@ function RestartExplorer {
         Stop-Process -processName: Explorer -Force
     }
     else {
-        Write-Warning "Unable to restart Windows Explorer process, please manually reboot your PC to apply all changes."
+        Write-Warning "无法重新启动 Windows 资源管理器进程,请手动重启PC以应用所有更改."
     }
 }
 
