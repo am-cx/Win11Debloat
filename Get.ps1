@@ -74,55 +74,55 @@ param (
     [switch]$DisableShare, [switch]$HideShare
 )
 
-# Show error if current powershell environment does not have LanguageMode set to FullLanguage 
+# 如果当前的powershell环境没有将语言模式设置为全语言，则显示错误
 if ($ExecutionContext.SessionState.LanguageMode -ne "FullLanguage") {
-   Write-Host "Error: Win11Debloat is unable to run on your system. PowerShell execution is restricted by security policies" -ForegroundColor Red
+   Write-Host "错误：Win11Debloat无法在您的系统上运行。 PowerShell的执行受到安全策略的限制" -ForegroundColor Red
    Write-Output ""
-   Write-Output "Press enter to exit..."
+   Write-Output "按回车键退出..."
    Read-Host | Out-Null
    Exit
 }
 
 Clear-Host
 Write-Output "-------------------------------------------------------------------------------------------"
-Write-Output " Win11Debloat Script - Get"
+Write-Output " Win11Debloat脚本-获取"
 Write-Output "-------------------------------------------------------------------------------------------"
 
-Write-Output "> Downloading Win11Debloat..."
+Write-Output "> 正在下载Win11Debloat..."
 
-# Download latest version of Win11Debloat from GitHub as zip archive
+# 从GitHub下载最新版本的Win11Debloat作为zip存档
 try {
     $LatestReleaseUri = (Invoke-RestMethod https://api.github.com/repos/Raphire/Win11Debloat/releases/latest).zipball_url
     Invoke-RestMethod $LatestReleaseUri -OutFile "$env:TEMP/win11debloat.zip"
 }
 catch {
-    Write-Host "Error: Unable to fetch latest release from GitHub. Please check your internet connection and try again." -ForegroundColor Red
+    Write-Host "错误：无法从GitHub获取最新版本。 请检查您的互联网连接，然后重试." -ForegroundColor Red
     Write-Output ""
-    Write-Output "Press enter to exit..."
+    Write-Output "按回车键退出..."
     Read-Host | Out-Null
     Exit
 }
 
-# Remove old script folder if it exists, except for CustomAppsList and SavedSettings files
+# 删除旧脚本文件夹（如果存在），CustomAppsList和SavedSettings文件除外
 if (Test-Path "$env:TEMP/Win11Debloat") {
     Write-Output ""
-    Write-Output "> Cleaning up old Win11Debloat folder..."
+    Write-Output "> 清理旧的Win11Debloat文件夹..."
     Get-ChildItem -Path "$env:TEMP/Win11Debloat" -Exclude CustomAppsList,SavedSettings,Win11Debloat.log | Remove-Item -Recurse -Force
 }
 
 Write-Output ""
-Write-Output "> Unpacking..."
+Write-Output "> 正在解压..."
 
-# Unzip archive to Win11Debloat folder
+# 将存档解压缩到Win11Debloat文件夹
 Expand-Archive "$env:TEMP/win11debloat.zip" "$env:TEMP/Win11Debloat"
 
-# Remove archive
+# 删除存档
 Remove-Item "$env:TEMP/win11debloat.zip"
 
-# Move files
+# 移动文件
 Get-ChildItem -Path "$env:TEMP/Win11Debloat/Raphire-Win11Debloat-*" -Recurse | Move-Item -Destination "$env:TEMP/Win11Debloat"
 
-# Make list of arguments to pass on to the script
+# 列出要传递到脚本的参数列表
 $arguments = $($PSBoundParameters.GetEnumerator() | ForEach-Object {
     if ($_.Value -eq $true) {
         "-$($_.Key)"
@@ -133,22 +133,22 @@ $arguments = $($PSBoundParameters.GetEnumerator() | ForEach-Object {
 })
 
 Write-Output ""
-Write-Output "> Running Win11Debloat..."
+Write-Output "> 运行Win11Debloat..."
 
-# Run Win11Debloat script with the provided arguments
+# 使用提供的参数运行Win11Debloat脚本
 $debloatProcess = Start-Process powershell.exe -PassThru -ArgumentList "-executionpolicy bypass -File $env:TEMP\Win11Debloat\Win11Debloat.ps1 $arguments" -Verb RunAs
 
-# Wait for the process to finish before continuing
+# 等待流程完成后再继续
 if ($null -ne $debloatProcess) {
     $debloatProcess.WaitForExit()
 }
 
-# Remove all remaining script files, except for CustomAppsList and SavedSettings files
+# 删除所有剩余的脚本文件，CustomAppsList和SavedSettings文件除外
 if (Test-Path "$env:TEMP/Win11Debloat") {
     Write-Output ""
     Write-Output "> Cleaning up..."
 
-    # Cleanup, remove Win11Debloat directory
+    # 清理，删除Win11Debloat目录
     Get-ChildItem -Path "$env:TEMP/Win11Debloat" -Exclude CustomAppsList,SavedSettings,Win11Debloat.log | Remove-Item -Recurse -Force
 }
 
