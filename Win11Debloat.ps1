@@ -80,11 +80,11 @@ param (
 
 # Show error if current powershell environment is limited by security policies
 if ($ExecutionContext.SessionState.LanguageMode -ne "FullLanguage") {
-    Write-Host "é”™è¯¯: Win11Debloat æ— æ³•åœ¨æ‚¨çš„ç³»ç»Ÿä¸Šè¿è¡Œ, powershell æ‰§è¡Œå—åˆ°å®‰å…¨æ”¿ç­–çš„é™åˆ¶" -ForegroundColor Red
+    Write-Host "´íÎó: Win11Debloat ÎŞ·¨ÔÚÄúµÄÏµÍ³ÉÏÔËĞĞ, powershell Ö´ĞĞÊÜµ½°²È«Õş²ßµÄÏŞÖÆ" -ForegroundColor Red
     AwaitKeyToExit
 }
 
-# åœ¨æŒ‡å®šè·¯å¾„ä¸Šå°†è„šæœ¬è¾“å‡ºåˆ° 'Win11Debloat.log' æ–‡ä»¶å¤¹
+# ÔÚÖ¸¶¨Â·¾¶ÉÏ½«½Å±¾Êä³öµ½ 'Win11Debloat.log' ÎÄ¼ş¼Ğ
 if ($LogPath -and (Test-Path $LogPath)) {
     Start-Transcript -Path "$LogPath/Win11Debloat.log" -Append -IncludeInvocationHeader -Force | Out-Null
 }
@@ -102,12 +102,12 @@ else {
 
 
 
-# æ˜¾ç¤ºåº”ç”¨ç¨‹åºé€‰æ‹©è¡¨å•ï¼Œå…è®¸ç”¨æˆ·é€‰æ‹©ä»–ä»¬æƒ³è¦åˆ é™¤æˆ–ä¿ç•™çš„åº”ç”¨ç¨‹åº
+# ÏÔÊ¾Ó¦ÓÃ³ÌĞòÑ¡Ôñ±íµ¥£¬ÔÊĞíÓÃ»§Ñ¡ÔñËûÃÇÏëÒªÉ¾³ı»ò±£ÁôµÄÓ¦ÓÃ³ÌĞò
 function ShowAppSelectionForm {
     [reflection.assembly]::loadwithpartialname("System.Windows.Forms") | Out-Null
     [reflection.assembly]::loadwithpartialname("System.Drawing") | Out-Null
 
-    # åˆå§‹åŒ–è¡¨å•å¯¹è±¡
+    # ³õÊ¼»¯±íµ¥¶ÔÏó
     $form = New-Object System.Windows.Forms.Form
     $label = New-Object System.Windows.Forms.Label
     $button1 = New-Object System.Windows.Forms.Button
@@ -120,11 +120,11 @@ function ShowAppSelectionForm {
 
     $script:selectionBoxIndex = -1
 
-    # saveButton äº‹ä»¶å¤„ç†ç¨‹åº
+    # saveButton ÊÂ¼ş´¦Àí³ÌĞò
     $handler_saveButton_Click= 
     {
         if ($selectionBox.CheckedItems -contains "Microsoft.WindowsStore" -and -not $Silent) {
-            $warningSelection = [System.Windows.Forms.Messagebox]::Show('æ‚¨ç¡®å®šè¦å¸è½½ Microsoft Store å—? æ­¤åº”ç”¨ç¨‹åºæ— æ³•è½»æ˜“é‡æ–°å®‰è£….', 'ä½ ç¡®å®šå—?', 'YesNo', 'Warning')
+            $warningSelection = [System.Windows.Forms.Messagebox]::Show('ÄúÈ·¶¨ÒªĞ¶ÔØ Microsoft Store Âğ? ´ËÓ¦ÓÃ³ÌĞòÎŞ·¨ÇáÒ×ÖØĞÂ°²×°.', 'ÄãÈ·¶¨Âğ?', 'YesNo', 'Warning')
         
             if ($warningSelection -eq 'No') {
                 return
@@ -133,7 +133,7 @@ function ShowAppSelectionForm {
 
         $script:SelectedApps = $selectionBox.CheckedItems
 
-        # å¦‚æœæ‰€é€‰åº”ç”¨ç¨‹åºä¸å­˜åœ¨,è¯·åˆ›å»ºå­˜å‚¨æ–‡ä»¶
+        # Èç¹ûËùÑ¡Ó¦ÓÃ³ÌĞò²»´æÔÚ,Çë´´½¨´æ´¢ÎÄ¼ş
         if (-not (Test-Path "$PSScriptRoot/CustomAppsList")) {
             $null = New-Item "$PSScriptRoot/CustomAppsList"
         }
@@ -144,7 +144,7 @@ function ShowAppSelectionForm {
         $form.Close()
     }
 
-    # cancelButton äº‹ä»¶å¤„ç†ç¨‹åº
+    # cancelButton ÊÂ¼ş´¦Àí³ÌĞò
     $handler_cancelButton_Click= 
     {
         $form.Close()
@@ -189,85 +189,85 @@ function ShowAppSelectionForm {
 
     $load_Apps=
     {
-        # æ›´æ­£è¡¨å•çš„åˆå§‹çŠ¶æ€,ä»¥é˜²æ­¢.Net æœ€å¤§åŒ–è¡¨å•é—®é¢˜
+        # ¸üÕı±íµ¥µÄ³õÊ¼×´Ì¬,ÒÔ·ÀÖ¹.Net ×î´ó»¯±íµ¥ÎÊÌâ
         $form.WindowState = $initialFormWindowState
 
-        # åœ¨å†æ¬¡åŠ è½½åº”ç”¨ç¨‹åºåˆ—è¡¨ä¹‹å‰,å°†çŠ¶æ€é‡ç½®ä¸ºé»˜è®¤çŠ¶æ€
+        # ÔÚÔÙ´Î¼ÓÔØÓ¦ÓÃ³ÌĞòÁĞ±íÖ®Ç°,½«×´Ì¬ÖØÖÃÎªÄ¬ÈÏ×´Ì¬
         $script:selectionBoxIndex = -1
         $checkUncheckCheckBox.Checked = $False
 
-        # æ˜¾ç¤ºåŠ è½½æŒ‡ç¤ºå™¨
+        # ÏÔÊ¾¼ÓÔØÖ¸Ê¾Æ÷
         $loadingLabel.Visible = $true
         $form.Refresh()
 
-        # åœ¨æ·»åŠ ä»»ä½•æ–°é¡¹ç›®ä¹‹å‰æ¸…é™¤é€‰æ‹©æ¡†
+        # ÔÚÌí¼ÓÈÎºÎĞÂÏîÄ¿Ö®Ç°Çå³ıÑ¡Ôñ¿ò
         $selectionBox.Items.Clear()
 
-        # è®¾ç½®å¯ä»¥æ‰¾åˆ°Appslistçš„æ–‡ä»¶è·¯å¾„
+        # ÉèÖÃ¿ÉÒÔÕÒµ½AppslistµÄÎÄ¼şÂ·¾¶
         $appsFile = "$PSScriptRoot/Appslist.txt"
         $listOfApps = ""
 
         if ($onlyInstalledCheckBox.Checked -and ($script:wingetInstalled -eq $true)) {
-            # å°è¯•é€šè¿‡wingetè·å–å·²å®‰è£…åº”ç”¨ç¨‹åºçš„åˆ—è¡¨,10ç§’åè¶…æ—¶
+            # ³¢ÊÔÍ¨¹ıwinget»ñÈ¡ÒÑ°²×°Ó¦ÓÃ³ÌĞòµÄÁĞ±í,10Ãëºó³¬Ê±
             $job = Start-Job { return winget list --accept-source-agreements --disable-interactivity }
             $jobDone = $job | Wait-Job -TimeOut 10
 
             if (-not $jobDone) {
-                # æ˜¾ç¤ºé”™è¯¯ï¼Œè„šæœ¬æ— æ³•ä» winget è·å–åº”ç”¨ç¨‹åºåˆ—è¡¨
-                [System.Windows.MessageBox]::Show('æ— æ³•é€šè¿‡ winget åŠ è½½å·²å®‰è£…åº”ç”¨ç¨‹åºçš„åˆ—è¡¨ï¼ŒæŸäº›åº”ç”¨ç¨‹åºå¯èƒ½ä¸ä¼šæ˜¾ç¤ºåœ¨åˆ—è¡¨ä¸­.', 'é”™è¯¯', 'æ­£ç¡®', 'é”™è¯¯')
+                # ÏÔÊ¾´íÎó£¬½Å±¾ÎŞ·¨´Ó winget »ñÈ¡Ó¦ÓÃ³ÌĞòÁĞ±í
+                [System.Windows.MessageBox]::Show('ÎŞ·¨Í¨¹ı winget ¼ÓÔØÒÑ°²×°Ó¦ÓÃ³ÌĞòµÄÁĞ±í£¬Ä³Ğ©Ó¦ÓÃ³ÌĞò¿ÉÄÜ²»»áÏÔÊ¾ÔÚÁĞ±íÖĞ.', '´íÎó', 'ÕıÈ·', '´íÎó')
             }
             else {
-                # å°†ä»»åŠ¡çš„è¾“å‡º (åº”ç”¨ç¨‹åº) æ·»åŠ åˆ° $listOfApps
+                # ½«ÈÎÎñµÄÊä³ö (Ó¦ÓÃ³ÌĞò) Ìí¼Óµ½ $listOfApps
                 $listOfApps = Receive-Job -Job $job
             }
         }
 
-        # æµè§ˆåº”ç”¨ç¨‹åºåˆ—è¡¨ï¼Œå¹¶å°†é¡¹ç›®é€ä¸ªæ·»åŠ åˆ° selectionBox
+        # ä¯ÀÀÓ¦ÓÃ³ÌĞòÁĞ±í£¬²¢½«ÏîÄ¿Öğ¸öÌí¼Óµ½ selectionBox
         Foreach ($app in (Get-Content -Path $appsFile | Where-Object { $_ -notmatch '^\s*$' -and $_ -notmatch '^#  .*' -and $_ -notmatch '^# -* #' } )) { 
             $appChecked = $true
 
-            # å¦‚æœå­˜åœ¨,è¯·åˆ é™¤ç¬¬ä¸€ä¸ª # ,å¹¶å°† appChecked è®¾ç½®ä¸º false
+            # Èç¹û´æÔÚ,ÇëÉ¾³ıµÚÒ»¸ö # ,²¢½« appChecked ÉèÖÃÎª false
             if ($app.StartsWith('#')) {
                 $app = $app.TrimStart("#")
                 $appChecked = $false
             }
 
-            # ä»åº”ç”¨ç¨‹åºåç§°ä¸­åˆ é™¤ä»»ä½•æ³¨é‡Š
+            # ´ÓÓ¦ÓÃ³ÌĞòÃû³ÆÖĞÉ¾³ıÈÎºÎ×¢ÊÍ
             if (-not ($app.IndexOf('#') -eq -1)) {
                 $app = $app.Substring(0, $app.IndexOf('#'))
             }
             
-            # ä» Appname ä¸­åˆ é™¤å‰å¯¼å’Œåå¯¼ç©ºæ ¼ä»¥åŠ`*`å­—ç¬¦
+            # ´Ó Appname ÖĞÉ¾³ıÇ°µ¼ºÍºóµ¼¿Õ¸ñÒÔ¼°`*`×Ö·û
             $app = $app.Trim()
             $appString = $app.Trim('*')
 
-            # ç¡®ä¿ appString ä¸æ˜¯ç©ºçš„
+            # È·±£ appString ²»ÊÇ¿ÕµÄ
             if ($appString.length -gt 0) {
                 if ($onlyInstalledCheckBox.Checked) {
-                    # å¦‚æœ onlyInstalledCheckBox è¢«é€‰ä¸­,åœ¨å°†å…¶æ·»åŠ åˆ° selectionBox ä¹‹å‰,è¯·æ£€æŸ¥åº”ç”¨ç¨‹åºæ˜¯å¦å·²å®‰è£…
+                    # Èç¹û onlyInstalledCheckBox ±»Ñ¡ÖĞ,ÔÚ½«ÆäÌí¼Óµ½ selectionBox Ö®Ç°,Çë¼ì²éÓ¦ÓÃ³ÌĞòÊÇ·ñÒÑ°²×°
                     if (-not ($listOfApps -like ("*$appString*")) -and -not (Get-AppxPackage -Name $app)) {
-                        # åº”ç”¨ç¨‹åºæœªå®‰è£…,ç»§ç»­ä¸‹ä¸€ä¸ªé¡¹ç›®
+                        # Ó¦ÓÃ³ÌĞòÎ´°²×°,¼ÌĞøÏÂÒ»¸öÏîÄ¿
                         continue
                     }
                     if (($appString -eq "Microsoft.Edge") -and -not ($listOfApps -like "* Microsoft.Edge *")) {
-                        # åº”ç”¨ç¨‹åºæœªå®‰è£…,ç»§ç»­ä¸‹ä¸€ä¸ªé¡¹ç›®
+                        # Ó¦ÓÃ³ÌĞòÎ´°²×°,¼ÌĞøÏÂÒ»¸öÏîÄ¿
                         continue
                     }
                 }
 
-                # å°†åº”ç”¨ç¨‹åºæ·»åŠ åˆ° selectionBox,å¹¶è®¾ç½®å…¶å·²æ£€æŸ¥çŠ¶æ€
+                # ½«Ó¦ÓÃ³ÌĞòÌí¼Óµ½ selectionBox,²¢ÉèÖÃÆäÒÑ¼ì²é×´Ì¬
                 $selectionBox.Items.Add($appString, $appChecked) | Out-Null
             }
         }
         
-        # éšè—åŠ è½½æŒ‡ç¤ºå™¨
+        # Òş²Ø¼ÓÔØÖ¸Ê¾Æ÷
         $loadingLabel.Visible = $False
 
-        # æŒ‰å­—æ¯é¡ºåºå¯¹ selectionBox è¿›è¡Œæ’åº
+        # °´×ÖÄ¸Ë³Ğò¶Ô selectionBox ½øĞĞÅÅĞò
         $selectionBox.Sorted = $True
     }
 
-    $form.Text = "Win11Debloat åº”ç”¨ç¨‹åºé€‰æ‹©"
+    $form.Text = "Win11Debloat Ó¦ÓÃ³ÌĞòÑ¡Ôñ"
     $form.Name = "appSelectionForm"
     $form.DataBindings.DefaultDataSourceUpdateMode = 0
     $form.ClientSize = New-Object System.Drawing.Size(400,502)
@@ -277,7 +277,7 @@ function ShowAppSelectionForm {
     $button1.TabIndex = 4
     $button1.Name = "saveButton"
     $button1.UseVisualStyleBackColor = $True
-    $button1.Text = "ç¡®å®š"
+    $button1.Text = "È·¶¨"
     $button1.Location = New-Object System.Drawing.Point(27,472)
     $button1.Size = New-Object System.Drawing.Size(75,23)
     $button1.DataBindings.DefaultDataSourceUpdateMode = 0
@@ -289,7 +289,7 @@ function ShowAppSelectionForm {
     $button2.Name = "cancelButton"
     $button2.DialogResult = [System.Windows.Forms.DialogResult]::Cancel
     $button2.UseVisualStyleBackColor = $True
-    $button2.Text = "å–æ¶ˆ"
+    $button2.Text = "È¡Ïû"
     $button2.Location = New-Object System.Drawing.Point(129,472)
     $button2.Size = New-Object System.Drawing.Size(75,23)
     $button2.DataBindings.DefaultDataSourceUpdateMode = 0
@@ -300,13 +300,13 @@ function ShowAppSelectionForm {
     $label.Location = New-Object System.Drawing.Point(13,5)
     $label.Size = New-Object System.Drawing.Size(400,14)
     $Label.Font = 'Microsoft Sans Serif,8'
-    $label.Text = 'é€‰ä¸­æ‚¨å¸Œæœ›åˆ é™¤çš„åº”ç”¨ç¨‹åº,å–æ¶ˆé€‰ä¸­æ‚¨å¸Œæœ›ä¿ç•™çš„åº”ç”¨ç¨‹åº'
+    $label.Text = 'Ñ¡ÖĞÄúÏ£ÍûÉ¾³ıµÄÓ¦ÓÃ³ÌĞò,È¡ÏûÑ¡ÖĞÄúÏ£Íû±£ÁôµÄÓ¦ÓÃ³ÌĞò'
 
     $form.Controls.Add($label)
 
     $loadingLabel.Location = New-Object System.Drawing.Point(16,46)
     $loadingLabel.Size = New-Object System.Drawing.Size(300,418)
-    $loadingLabel.Text = 'æ­£åœ¨åŠ è½½åº”ç”¨ç¨‹åº...'
+    $loadingLabel.Text = 'ÕıÔÚ¼ÓÔØÓ¦ÓÃ³ÌĞò...'
     $loadingLabel.BackColor = "White"
     $loadingLabel.Visible = $false
 
@@ -315,7 +315,7 @@ function ShowAppSelectionForm {
     $onlyInstalledCheckBox.TabIndex = 6
     $onlyInstalledCheckBox.Location = New-Object System.Drawing.Point(230,474)
     $onlyInstalledCheckBox.Size = New-Object System.Drawing.Size(150,20)
-    $onlyInstalledCheckBox.Text = 'ä»…æ˜¾ç¤ºå·²å®‰è£…çš„åº”ç”¨ç¨‹åº'
+    $onlyInstalledCheckBox.Text = '½öÏÔÊ¾ÒÑ°²×°µÄÓ¦ÓÃ³ÌĞò'
     $onlyInstalledCheckBox.add_CheckedChanged($load_Apps)
 
     $form.Controls.Add($onlyInstalledCheckBox)
@@ -323,7 +323,7 @@ function ShowAppSelectionForm {
     $checkUncheckCheckBox.TabIndex = 7
     $checkUncheckCheckBox.Location = New-Object System.Drawing.Point(16,22)
     $checkUncheckCheckBox.Size = New-Object System.Drawing.Size(150,20)
-    $checkUncheckCheckBox.Text = 'å…¨é€‰/å…¨ä¸é€‰'
+    $checkUncheckCheckBox.Text = 'È«Ñ¡/È«²»Ñ¡'
     $checkUncheckCheckBox.add_CheckedChanged($check_All)
 
     $form.Controls.Add($checkUncheckCheckBox)
@@ -339,21 +339,21 @@ function ShowAppSelectionForm {
 
     $form.Controls.Add($selectionBox)
 
-    # ä¿å­˜è¡¨å•çš„åˆå§‹çŠ¶æ€
+    # ±£´æ±íµ¥µÄ³õÊ¼×´Ì¬
     $initialFormWindowState = $form.WindowState
 
-    # å°†åº”ç”¨åŠ è½½åˆ° selectionBox
+    # ½«Ó¦ÓÃ¼ÓÔØµ½ selectionBox
     $form.add_Load($load_Apps)
 
-    # è¡¨å•æ‰“å¼€æ—¶èšç„¦ selectionBox
+    # ±íµ¥´ò¿ªÊ±¾Û½¹ selectionBox
     $form.Add_Shown({$form.Activate(); $selectionBox.Focus()})
 
-    # æ˜¾ç¤ºè¡¨å•
+    # ÏÔÊ¾±íµ¥
     return $form.ShowDialog()
 }
 
 
-# å¾æŒ‡å®šæª”æ¡ˆä¸­è¿”å›æ‡‰ç”¨ç¨‹å¼åˆ—è¡¨,å®ƒä¿®å‰ªæ‡‰ç”¨ç¨‹å¼åç¨±ä¸¦åˆªé™¤ä»»ä½•è©•è«–
+# ÄÖ¸¶¨™n°¸ÖĞ·µ»Ø‘ªÓÃ³ÌÊ½ÁĞ±í,ËüĞŞ¼ô‘ªÓÃ³ÌÊ½Ãû·QK„h³ıÈÎºÎÔuÕ“
 function ReadAppslistFromFile {
     param (
         $appsFilePath
@@ -361,14 +361,14 @@ function ReadAppslistFromFile {
 
     $appsList = @()
 
-    # ä»æä¾›è·¯å¾„çš„æ–‡ä»¶ä¸­è·å–åº”ç”¨ç¨‹åºåˆ—è¡¨,å¹¶é€ä¸€åˆ é™¤å®ƒä»¬
+    # ´ÓÌá¹©Â·¾¶µÄÎÄ¼şÖĞ»ñÈ¡Ó¦ÓÃ³ÌĞòÁĞ±í,²¢ÖğÒ»É¾³ıËüÃÇ
     Foreach ($app in (Get-Content -Path $appsFilePath | Where-Object { $_ -notmatch '^#.*' -and $_ -notmatch '^\s*$' } )) { 
-        # ä»åº”ç”¨åç§°ä¸­ç§»é™¤æ‰€æœ‰æ³¨é‡Š
+        # ´ÓÓ¦ÓÃÃû³ÆÖĞÒÆ³ıËùÓĞ×¢ÊÍ
         if (-not ($app.IndexOf('#') -eq -1)) {
             $app = $app.Substring(0, $app.IndexOf('#'))
         }
 
-        # ç§»é™¤åº”ç”¨åç§°ä¹‹å‰å’Œä¹‹åçš„ä»»ä½•ç©ºæ ¼
+        # ÒÆ³ıÓ¦ÓÃÃû³ÆÖ®Ç°ºÍÖ®ºóµÄÈÎºÎ¿Õ¸ñ
         $app = $app.Trim()
         
         $appString = $app.Trim('*')
@@ -378,41 +378,39 @@ function ReadAppslistFromFile {
     return $appsList
 }
 
-
-# ç§»é™¤å‡½æ•°è°ƒç”¨æœŸé—´æŒ‡å®šçš„æ‰€æœ‰ç”¨æˆ·è´¦æˆ·å’Œæ“ä½œç³»ç»Ÿé•œåƒä¸­çš„åº”ç”¨.
+# ÒÆ³ıº¯Êıµ÷ÓÃÆÚ¼äÖ¸¶¨µÄËùÓĞÓÃ»§ÕË»§ºÍ²Ù×÷ÏµÍ³¾µÏñÖĞµÄÓ¦ÓÃ.
 function RemoveApps {
     param (
         $appslist
     )
-
     Foreach ($app in $appsList) { 
-        Write-Output "æ­£åœ¨å°è¯•ç§»é™¤ $app..."
+        Write-Output "ÕıÔÚ³¢ÊÔÒÆ³ı $app..."
 
-        # ä»…ä½¿ç”¨ winget åˆ é™¤ OneDrive å’Œ Edge
+        # ½öÊ¹ÓÃ winget É¾³ı OneDrive ºÍ Edge
         if (($app -eq "Microsoft.OneDrive") -or ($app -eq "Microsoft.Edge")) {
             if ($script:wingetInstalled -eq $false) {
-                Write-Host "é”™è¯¯: WinGet æœªå®‰è£…æˆ–å·²è¿‡æ—¶,æ— æ³•ç§»é™¤ $app" -ForegroundColor Red
+                Write-Host "´íÎó: WinGet Î´°²×°»òÒÑ¹ıÊ±,ÎŞ·¨ÒÆ³ı $app" -ForegroundColor Red
                 continue
             }
 
             $appName = $app -replace '\.', '_'
 
-            # é€šè¿‡ winget å¸è½½åº”ç”¨ç¨‹åº,æˆ–åˆ›å»ºè®¡åˆ’ä»»åŠ¡ä»¥ç¨åå¸è½½å®ƒ
-            if ($script:Params.ContainsKey("ä½¿ç”¨è€…")) {
-                RegImport "æ·»åŠ è¦å¸è½½çš„é¢„å®šä»»åŠ¡ $app for user $(GetUserName)..." "å¸è½½_$($appName).reg"
+            # Í¨¹ı winget Ğ¶ÔØÓ¦ÓÃ³ÌĞò,»ò´´½¨¼Æ»®ÈÎÎñÒÔÉÔºóĞ¶ÔØËü
+            if ($script:Params.ContainsKey("Ê¹ÓÃÕß")) {
+                RegImport "Ìí¼ÓÒªĞ¶ÔØµÄÔ¤¶¨ÈÎÎñ $app for user $(GetUserName)..." "Ğ¶ÔØ_$($appName).reg"
             }
-            elseif ($script:Params.ContainsKey("ç³»ç»Ÿå‡†å¤‡")) {
-                RegImport "æ·»åŠ è¦å¸è½½çš„é¢„å®šä»»åŠ¡ $app æ–°ç”¨æˆ·ç™»å½•å..." "å¸è½½_$($appName).reg"
+            elseif ($script:Params.ContainsKey("ÏµÍ³×¼±¸")) {
+                RegImport "Ìí¼ÓÒªĞ¶ÔØµÄÔ¤¶¨ÈÎÎñ $app ĞÂÓÃ»§µÇÂ¼ºó..." "Ğ¶ÔØ_$($appName).reg"
             }
             else {
                 Strip-Progress -ScriptBlock { winget uninstall --accept-source-agreements --disable-interactivity --id $app } | Tee-Object -Variable wingetOutput
             }
 
-            If (($app -eq "Microsoft.Edge") -and (Select-String -InputObject $wingetOutput -Pattern "å¸è½½å¤±è´¥ï¼Œé€€å‡º")) {
-                Write-Host "æ— æ³•é€šè¿‡ Winget å¸è½½ Microsoft Edge" -ForegroundColor Red
+            If (($app -eq "Microsoft.Edge") -and (Select-String -InputObject $wingetOutput -Pattern "Ğ¶ÔØÊ§°Ü£¬ÍË³ö")) {
+                Write-Host "ÎŞ·¨Í¨¹ı Winget Ğ¶ÔØ Microsoft Edge" -ForegroundColor Red
                 Write-Output ""
 
-                if ($( Read-Host -Prompt "æ‚¨æƒ³å¼ºè¡Œå¸è½½ Microsoft Edge å—? ä¸æ¨è! (y/n)" ) -eq 'y') {
+                if ($( Read-Host -Prompt "ÄúÏëÇ¿ĞĞĞ¶ÔØ Microsoft Edge Âğ? ²»ÍÆ¼ö! (y/n)" ) -eq 'y') {
                     Write-Output ""
                     ForceRemoveEdge
                 }
@@ -421,30 +419,30 @@ function RemoveApps {
             continue
         }
 
-        # ä½¿ç”¨ Remove-AppxPackage åˆ é™¤æ‰€æœ‰å…¶ä»–åº”ç”¨ç¨‹åº
+        # Ê¹ÓÃ Remove-AppxPackage É¾³ıËùÓĞÆäËûÓ¦ÓÃ³ÌĞò
         $app = '*' + $app + '*'
 
-        # ä¸ºæ‰€æœ‰ç°æœ‰ç”¨æˆ·åˆ é™¤å·²å®‰è£…çš„åº”ç”¨ç¨‹åº
+        # ÎªËùÓĞÏÖÓĞÓÃ»§É¾³ıÒÑ°²×°µÄÓ¦ÓÃ³ÌĞò
         try {
             Get-AppxPackage -Name $app -AllUsers | Remove-AppxPackage -AllUsers -ErrorAction Continue
 
             if ($DebugPreference -ne "SilentlyContinue") {
-                Write-Host "å·²ä¸ºæ‰€æœ‰ç”¨æˆ·ç§»é™¤ $app" -ForegroundColor DarkGray
+                Write-Host "ÒÑÎªËùÓĞÓÃ»§ÒÆ³ı $app" -ForegroundColor DarkGray
             }
         }
         catch {
             if ($DebugPreference -ne "SilentlyContinue") {
-                Write-Host "æ— æ³•ä¸ºæ‰€æœ‰ç”¨æˆ·ç§»é™¤ $app" -ForegroundColor Yellow
+                Write-Host "ÎŞ·¨ÎªËùÓĞÓÃ»§ÒÆ³ı $app" -ForegroundColor Yellow
                 Write-Host $psitem.Exception.StackTrace -ForegroundColor Gray
             }
         }
 
-        # ä»æ“ä½œç³»ç»Ÿæ˜ åƒä¸­åˆ é™¤å·²é…ç½®çš„åº”ç”¨ç¨‹åº,å› æ­¤ä¸ä¼šä¸ºä»»ä½•æ–°ç”¨æˆ·å®‰è£…è¯¥åº”ç”¨ç¨‹åº
+        # ´Ó²Ù×÷ÏµÍ³Ó³ÏñÖĞÉ¾³ıÒÑÅäÖÃµÄÓ¦ÓÃ³ÌĞò,Òò´Ë²»»áÎªÈÎºÎĞÂÓÃ»§°²×°¸ÃÓ¦ÓÃ³ÌĞò
         try {
             Get-AppxProvisionedPackage -Online | Where-Object { $_.PackageName -like $app } | ForEach-Object { Remove-ProvisionedAppxPackage -Online -AllUsers -PackageName $_.PackageName }
         }
         catch {
-            Write-Host "æ— æ³•ä»windowså›¾åƒä¸­åˆ é™¤ $app" -ForegroundColor Yellow
+            Write-Host "ÎŞ·¨´ÓwindowsÍ¼ÏñÖĞÉ¾³ı $app" -ForegroundColor Yellow
             Write-Host $psitem.Exception.StackTrace -ForegroundColor Gray
         }
     }
@@ -453,28 +451,28 @@ function RemoveApps {
 }
 
 
-# ä½¿ç”¨å¸è½½ç¨‹åºå¼ºåˆ¶åˆ é™¤ Microsoft Edge
+# Ê¹ÓÃĞ¶ÔØ³ÌĞòÇ¿ÖÆÉ¾³ı Microsoft Edge
 function ForceRemoveEdge {
     # Based on work from loadstring1 & ave9858
-    Write-Output "> æ­£åœ¨å¼ºåˆ¶å¸è½½ Microsoft Edge..."
+    Write-Output "> ÕıÔÚÇ¿ÖÆĞ¶ÔØ Microsoft Edge..."
 
     $regView = [Microsoft.Win32.RegistryView]::Registry32
     $hklm = [Microsoft.Win32.RegistryKey]::OpenBaseKey([Microsoft.Win32.RegistryHive]::LocalMachine, $regView)
     $hklm.CreateSubKey('SOFTWARE\Microsoft\EdgeUpdateDev').SetValue('AllowUninstall', '')
 
-    # åˆ›å»ºå­˜æ ¹ (åˆ›å»ºæ­¤æ–‡ä»¶å¯ä»¥å¸è½½ Edge)
+    # ´´½¨´æ¸ù (´´½¨´ËÎÄ¼ş¿ÉÒÔĞ¶ÔØ Edge)
     $edgeStub = "$env:SystemRoot\SystemApps\Microsoft.MicrosoftEdge_8wekyb3d8bbwe"
     New-Item $edgeStub -ItemType Directory | Out-Null
     New-Item "$edgeStub\MicrosoftEdge.exe" | Out-Null
 
-    # ç§»é™¤ edge
+    # ÒÆ³ı edge
     $uninstallRegKey = $hklm.OpenSubKey('SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Microsoft Edge')
     if ($null -ne $uninstallRegKey) {
-        Write-Output "è¿è¡Œå¸è½½ç¨‹åº..."
+        Write-Output "ÔËĞĞĞ¶ÔØ³ÌĞò..."
         $uninstallString = $uninstallRegKey.GetValue('UninstallString') + ' --force-uninstall'
         Start-Process cmd.exe "/c $uninstallString" -WindowStyle Hidden -Wait
 
-        Write-Output "æ­£åœ¨ç§»é™¤æ®‹ç•™æ–‡ä»¶..."
+        Write-Output "ÕıÔÚÒÆ³ı²ĞÁôÎÄ¼ş..."
 
         $edgePaths = @(
             "$env:ProgramData\Microsoft\Windows\Start Menu\Programs\Microsoft Edge.lnk",
@@ -489,44 +487,44 @@ function ForceRemoveEdge {
         foreach ($path in $edgePaths) {
             if (Test-Path -Path $path) {
                 Remove-Item -Path $path -Force -Recurse -ErrorAction SilentlyContinue
-                Write-Host "  å·²ç§»é™¤ $path" -ForegroundColor DarkGray
+                Write-Host "  ÒÑÒÆ³ı $path" -ForegroundColor DarkGray
             }
         }
 
-        Write-Output "æ­£åœ¨æ¸…ç†æ³¨å†Œè¡¨..."
+        Write-Output "ÕıÔÚÇåÀí×¢²á±í..."
 
-        # ä»è‡ªåŠ¨å¯åŠ¨ä¸­ç§»é™¤ MS Edge
+        # ´Ó×Ô¶¯Æô¶¯ÖĞÒÆ³ı MS Edge
         reg delete "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run" /v "MicrosoftEdgeAutoLaunch_A9F6DCE4ABADF4F51CF45CD7129E3C6C" /f *>$null
         reg delete "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run" /v "Microsoft Edge Update" /f *>$null
         reg delete "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run" /v "MicrosoftEdgeAutoLaunch_A9F6DCE4ABADF4F51CF45CD7129E3C6C" /f *>$null
         reg delete "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run" /v "Microsoft Edge Update" /f *>$null
 
-        Write-Output "Microsoft Edge å·²å¸è½½"
+        Write-Output "Microsoft Edge ÒÑĞ¶ÔØ"
     }
     else {
         Write-Output ""
-        Write-Host "é”™è¯¯: æ— æ³•å¼ºåˆ¶å¸è½½ Microsoft Edge,æ‰¾ä¸åˆ°å¸è½½ç¨‹åº" -ForegroundColor Red
+        Write-Host "´íÎó: ÎŞ·¨Ç¿ÖÆĞ¶ÔØ Microsoft Edge,ÕÒ²»µ½Ğ¶ÔØ³ÌĞò" -ForegroundColor Red
     }
     
     Write-Output ""
 }
 
 
-# æ‰§è¡Œæä¾›çš„å‘½ä»¤ï¼Œå¹¶ä»æ§åˆ¶å°è¾“å‡ºä¸­å‰¥ç¦»è¿›åº¦æ—‹è½¬å™¨/æ¡
+# Ö´ĞĞÌá¹©µÄÃüÁî£¬²¢´Ó¿ØÖÆÌ¨Êä³öÖĞ°şÀë½ø¶ÈĞı×ªÆ÷/Ìõ
 function Strip-Progress {
     param(
         [ScriptBlock]$ScriptBlock
     )
 
-    # æ­£æ¨¡å¼æ¨¡å¼ä¸æ—‹è½¬å­—ç¬¦å’Œè¿›åº¦æ¡æ¨¡å¼ç›¸åŒ¹é…
-    $progressPattern = 'Î“Ã»[Ã†Ãª]|^\s+[-\\|/]\s+$'
+    # ÕıÄ£Ê½Ä£Ê½ÓëĞı×ª×Ö·ûºÍ½ø¶ÈÌõÄ£Ê½ÏàÆ¥Åä
+    $progressPattern = '¦£0‹4[0‡4¨º]|^\s+[-\\|/]\s+$'
 
-    # æ›´æ­£äº†å¤§å°æ ¼å¼çš„æ­£åˆ™è¡¨è¾¾å¼æ¨¡å¼,ç¡®ä¿ä½¿ç”¨æ­£ç¡®çš„æ•è·ç»„
+    # ¸üÕıÁË´óĞ¡¸ñÊ½µÄÕıÔò±í´ïÊ½Ä£Ê½,È·±£Ê¹ÓÃÕıÈ·µÄ²¶»ñ×é
     $sizePattern = '(\d+(\.\d{1,2})?)\s+(B|KB|MB|GB|TB|PB) /\s+(\d+(\.\d{1,2})?)\s+(B|KB|MB|GB|TB|PB)'
 
     & $ScriptBlock 2>&1 | ForEach-Object {
         if ($_ -is [System.Management.Automation.ErrorRecord]) {
-            "é”™è¯¯: $($_.Exception.Message)"
+            "´íÎó: $($_.Exception.Message)"
         }
         else {
             $line = $_ -replace $progressPattern, '' -replace $sizePattern, ''
@@ -538,7 +536,7 @@ function Strip-Progress {
 }
 
 
-# æ£€æŸ¥è¿™å°æœºå™¨æ˜¯å¦æ”¯æŒ S0 ç°ä»£å¾…æœºç”µæºçŠ¶æ€.å¦‚æœæ”¯æŒ S0 Modern Standby,åˆ™è¿”å›true,å¦åˆ™è¿”å›false.
+# ¼ì²éÕâÌ¨»úÆ÷ÊÇ·ñÖ§³Ö S0 ÏÖ´ú´ı»úµçÔ´×´Ì¬.Èç¹ûÖ§³Ö S0 Modern Standby,Ôò·µ»Øtrue,·ñÔò·µ»Øfalse.
 function CheckModernStandbySupport {
     $count = 0
 
@@ -556,9 +554,9 @@ function CheckModernStandbySupport {
         }
     }
     catch {
-        Write-Host "é”™è¯¯: æ— æ³•æ£€æŸ¥ S0 ç°ä»£å¾…æœºæ”¯æŒï¼Œpowercfg å‘½ä»¤å¤±è´¥" -ForegroundColor Red
+        Write-Host "´íÎó: ÎŞ·¨¼ì²é S0 ÏÖ´ú´ı»úÖ§³Ö£¬powercfg ÃüÁîÊ§°Ü" -ForegroundColor Red
         Write-Host ""
-        Write-Host "æŒ‰ä»»æ„é”®ç»§ç»­..."
+        Write-Host "°´ÈÎÒâ¼ü¼ÌĞø..."
         $null = [System.Console]::ReadKey()
         return $true
     }
@@ -567,7 +565,7 @@ function CheckModernStandbySupport {
 }
 
 
-# è¿”å›æŒ‡å®šç”¨æˆ·çš„ç›®å½•è·¯å¾„,å¦‚æœæ‰¾ä¸åˆ°ç”¨æˆ·è·¯å¾„,åˆ™é€€å‡ºè„šæœ¬
+# ·µ»ØÖ¸¶¨ÓÃ»§µÄÄ¿Â¼Â·¾¶,Èç¹ûÕÒ²»µ½ÓÃ»§Â·¾¶,ÔòÍË³ö½Å±¾
 function GetUserDirectory {
     param (
         $userName,
@@ -591,16 +589,16 @@ function GetUserDirectory {
         }
     }
     catch {
-        Write-Host "é”™è¯¯:å°è¯•æŸ¥æ‰¾ç”¨æˆ·çš„ç”¨æˆ·ç›®å½•è·¯å¾„æ—¶å‡ºé”™ $userName. è¯·ç¡®ä¿ç”¨æˆ·åœ¨æ­¤ç³»ç»Ÿä¸Šå­˜åœ¨." -ForegroundColor Red
+        Write-Host "´íÎó:³¢ÊÔ²éÕÒÓÃ»§µÄÓÃ»§Ä¿Â¼Â·¾¶Ê±³ö´í $userName. ÇëÈ·±£ÓÃ»§ÔÚ´ËÏµÍ³ÉÏ´æÔÚ." -ForegroundColor Red
         AwaitKeyToExit
     }
 
-    Write-Host "é”™è¯¯: æ— æ³•æ‰¾åˆ°ç”¨æˆ·çš„ç”¨æˆ·ç›®å½•è·¯å¾„ $userName" -ForegroundColor Red
+    Write-Host "´íÎó: ÎŞ·¨ÕÒµ½ÓÃ»§µÄÓÃ»§Ä¿Â¼Â·¾¶ $userName" -ForegroundColor Red
     AwaitKeyToExit
 }
 
 
-# å¯¼å…¥å’Œæ‰§è¡Œ regfile
+# µ¼ÈëºÍÖ´ĞĞ regfile
 function RegImport {
     param (
         $message,
@@ -632,38 +630,38 @@ function RegImport {
 }
 
 
-# é‡æ–°å¯åŠ¨ Windows èµ„æºç®¡ç†å™¨è¿›ç¨‹
+# ÖØĞÂÆô¶¯ Windows ×ÊÔ´¹ÜÀíÆ÷½ø³Ì
 function RestartExplorer {
     if ($script:Params.ContainsKey("Sysprep") -or $script:Params.ContainsKey("User") -or $script:Params.ContainsKey("NoRestartExplorer")) {
         return
     }
 
-    Write-Output "> é‡æ–°å¯åŠ¨ Windows èµ„æºç®¡ç†å™¨è¿›ç¨‹ä»¥åº”ç”¨æ‰€æœ‰æ›´æ”¹... (è¿™å¯èƒ½ä¼šå¯¼è‡´ä¸€äº›é—ªçƒ)"
+    Write-Output "> ÖØĞÂÆô¶¯ Windows ×ÊÔ´¹ÜÀíÆ÷½ø³ÌÒÔÓ¦ÓÃËùÓĞ¸ü¸Ä... (Õâ¿ÉÄÜ»áµ¼ÖÂÒ»Ğ©ÉÁË¸)"
 
     if ($script:Params.ContainsKey("DisableMouseAcceleration")) {
-        Write-Host "è­¦å‘Š:å¢å¼ºæŒ‡é’ˆç²¾åº¦è®¾ç½®æ›´æ”¹ä»…åœ¨é‡æ–°å¯åŠ¨åç”Ÿæ•ˆ" -ForegroundColor Yellow
+        Write-Host "¾¯¸æ: ÔöÇ¿Ö¸Õë¾«¶ÈÉèÖÃ¸ü¸Ä½öÔÚÖØĞÂÆô¶¯ºóÉúĞ§" -ForegroundColor Yellow
     }
 
     if ($script:Params.ContainsKey("DisableStickyKeys")) {
-        Write-Host "è­¦å‘Š: ç²˜æ€§é”®è®¾ç½®æ›´æ”¹åªæœ‰åœ¨é‡æ–°å¯åŠ¨åæ‰ä¼šç”Ÿæ•ˆ" -ForegroundColor Yellow
+        Write-Host "¾¯¸æ: Õ³ĞÔ¼üÉèÖÃ¸ü¸ÄÖ»ÓĞÔÚÖØĞÂÆô¶¯ºó²Å»áÉúĞ§" -ForegroundColor Yellow
     }
 
     if ($script:Params.ContainsKey("DisableAnimations")) {
-        Write-Host "è­¦å‘Š: åªæœ‰åœ¨é‡å¯åæ‰ä¼šç¦ç”¨åŠ¨ç”»" -ForegroundColor Yellow
+        Write-Host "¾¯¸æ: Ö»ÓĞÔÚÖØÆôºó²Å»á½ûÓÃ¶¯»­" -ForegroundColor Yellow
     }
 
-    # ä»…å½“powershellè¿›ç¨‹ä¸æ“ä½œç³»ç»Ÿæ¶æ„åŒ¹é…æ—¶ï¼Œæ‰é‡æ–°å¯åŠ¨.
+    # ½öµ± powershell ½ø³ÌÓë²Ù×÷ÏµÍ³¼Ü¹¹Æ¥ÅäÊ±£¬²ÅÖØĞÂÆô¶¯.
     # Restarting explorer from a 32bit PowerShell window will fail on a 64bit OS
     if ([Environment]::Is64BitProcess -eq [Environment]::Is64BitOperatingSystem) {
         Stop-Process -processName: Explorer -Force
     }
     else {
-        Write-Warning "æ— æ³•é‡æ–°å¯åŠ¨ Windows èµ„æºç®¡ç†å™¨è¿›ç¨‹,è¯·æ‰‹åŠ¨é‡å¯PCä»¥åº”ç”¨æ‰€æœ‰æ›´æ”¹."
+        Write-Warning "ÎŞ·¨ÖØĞÂÆô¶¯  Windows ×ÊÔ´¹ÜÀíÆ÷½ø³Ì, ÇëÊÖ¶¯ÖØÆô PC ÒÔÓ¦ÓÃËùÓĞ¸ü¸Ä."
     }
 }
 
 
-# æ›¿æ¢æ‰€æœ‰ç”¨æˆ·çš„å¼€å§‹èœå•ï¼Œå½“ä½¿ç”¨é»˜è®¤çš„å¼€å§‹èœå•æ¨¡æ¿æ—¶ï¼Œè¿™ä¼šæ¸…é™¤æ‰€æœ‰å›ºå®šçš„åº”ç”¨ç¨‹åº
+# Ìæ»»ËùÓĞÓÃ»§µÄ¿ªÊ¼²Ëµ¥£¬µ±Ê¹ÓÃÄ¬ÈÏµÄ¿ªÊ¼²Ëµ¥Ä£°åÊ±£¬Õâ»áÇå³ıËùÓĞ¹Ì¶¨µÄÓ¦ÓÃ³ÌĞò
 # Credit: https://lazyadmin.nl/win-11/customize-windows-11-start-menu-layout/
 function ReplaceStartMenuForAllUsers {
     param (
@@ -672,39 +670,39 @@ function ReplaceStartMenuForAllUsers {
 
     Write-Output "> Removing all pinned apps from the start menu for all users..."
 
-    # æ£€æŸ¥æ¨¡æ¿binæ–‡ä»¶æ˜¯å¦å­˜åœ¨ï¼Œå¦‚æœæ²¡æœ‰ï¼Œè¯·å°½æ—©è¿”å›
+    # ¼ì²éÄ£°åbinÎÄ¼şÊÇ·ñ´æÔÚ£¬Èç¹ûÃ»ÓĞ£¬Çë¾¡Ôç·µ»Ø
     if (-not (Test-Path $startMenuTemplate)) {
         Write-Host "Error: Unable to clear start menu, start2.bin file missing from script folder" -ForegroundColor Red
         Write-Output ""
         return
     }
 
-    # è·å–æ‰€æœ‰ç”¨æˆ·çš„å¯åŠ¨èœå•æ–‡ä»¶çš„è·¯å¾„
+    # »ñÈ¡ËùÓĞÓÃ»§µÄÆô¶¯²Ëµ¥ÎÄ¼şµÄÂ·¾¶
     $userPathString = GetUserDirectory -userName "*" -fileName "AppData\Local\Packages\Microsoft.Windows.StartMenuExperienceHost_cw5n1h2txyewy\LocalState"
     $usersStartMenuPaths = get-childitem -path $userPathString
 
-    # æµè§ˆæ‰€æœ‰ç”¨æˆ·å¹¶æ›¿æ¢å¼€å§‹èœå•æ–‡ä»¶
+    # ä¯ÀÀËùÓĞÓÃ»§²¢Ìæ»»¿ªÊ¼²Ëµ¥ÎÄ¼ş
     ForEach ($startMenuPath in $usersStartMenuPaths) {
         ReplaceStartMenu $startMenuTemplate "$($startMenuPath.Fullname)\start2.bin"
     }
 
-    # ä¹Ÿæ›¿æ¢é»˜è®¤ç”¨æˆ·é…ç½®æ–‡ä»¶çš„å¼€å§‹èœå•æ–‡ä»¶
+    # Ò²Ìæ»»Ä¬ÈÏÓÃ»§ÅäÖÃÎÄ¼şµÄ¿ªÊ¼²Ëµ¥ÎÄ¼ş
     $defaultStartMenuPath = GetUserDirectory -userName "Default" -fileName "AppData\Local\Packages\Microsoft.Windows.StartMenuExperienceHost_cw5n1h2txyewy\LocalState" -exitIfPathNotFound $false
 
-    # å¦‚æœä¸å­˜åœ¨ï¼Œè¯·åˆ›å»ºæ–‡ä»¶å¤¹
+    # Èç¹û²»´æÔÚ£¬Çë´´½¨ÎÄ¼ş¼Ğ
     if (-not (Test-Path $defaultStartMenuPath)) {
         new-item $defaultStartMenuPath -ItemType Directory -Force | Out-Null
-        Write-Output "ä¸ºé»˜è®¤ç”¨æˆ·é…ç½®æ–‡ä»¶åˆ›å»ºäº†LocalStateæ–‡ä»¶å¤¹"
+        Write-Output "ÎªÄ¬ÈÏÓÃ»§ÅäÖÃÎÄ¼ş´´½¨ÁËLocalStateÎÄ¼ş¼Ğ"
     }
 
-    # å°†æ¨¡æ¿å¤åˆ¶åˆ°é»˜è®¤é…ç½®æ–‡ä»¶
+    # ½«Ä£°å¸´ÖÆµ½Ä¬ÈÏÅäÖÃÎÄ¼ş
     Copy-Item -Path $startMenuTemplate -Destination $defaultStartMenuPath -Force
-    Write-Output "æ›¿æ¢äº†é»˜è®¤ç”¨æˆ·é…ç½®æ–‡ä»¶çš„å¼€å§‹èœå•"
+    Write-Output "Ìæ»»ÁËÄ¬ÈÏÓÃ»§ÅäÖÃÎÄ¼şµÄ¿ªÊ¼²Ëµ¥"
     Write-Output ""
 }
 
 
-# æ›¿æ¢æ‰€æœ‰ç”¨æˆ·çš„å¼€å§‹èœå•ï¼Œå½“ä½¿ç”¨é»˜è®¤çš„å¼€å§‹èœå•æ¨¡æ¿æ—¶ï¼Œè¿™ä¼šæ¸…é™¤æ‰€æœ‰å›ºå®šçš„åº”ç”¨ç¨‹åº
+# Ìæ»»ËùÓĞÓÃ»§µÄ¿ªÊ¼²Ëµ¥£¬µ±Ê¹ÓÃÄ¬ÈÏµÄ¿ªÊ¼²Ëµ¥Ä£°åÊ±£¬Õâ»áÇå³ıËùÓĞ¹Ì¶¨µÄÓ¦ÓÃ³ÌĞò
 # Credit: https://lazyadmin.nl/win-11/customize-windows-11-start-menu-layout/
 function ReplaceStartMenu {
     param (
@@ -712,19 +710,19 @@ function ReplaceStartMenu {
         $startMenuBinFile = "$env:LOCALAPPDATA\Packages\Microsoft.Windows.StartMenuExperienceHost_cw5n1h2txyewy\LocalState\start2.bin"
     )
 
-    # å¦‚æœæŒ‡å®šäº†ç”¨æˆ·ï¼Œè¯·å°†è·¯å¾„æ›´æ”¹ä¸ºæ­£ç¡®çš„ç”¨æˆ·
+    # Èç¹ûÖ¸¶¨ÁËÓÃ»§£¬Çë½«Â·¾¶¸ü¸ÄÎªÕıÈ·µÄÓÃ»§
     if ($script:Params.ContainsKey("User")) {
         $startMenuBinFile = GetUserDirectory -userName "$(GetUserName)" -fileName "AppData\Local\Packages\Microsoft.Windows.StartMenuExperienceHost_cw5n1h2txyewy\LocalState\start2.bin" -exitIfPathNotFound $false
     }
 
-    # æ£€æŸ¥æ¨¡æ¿binæ–‡ä»¶æ˜¯å¦å­˜åœ¨ï¼Œå¦‚æœæ²¡æœ‰ï¼Œè¯·å°½æ—©è¿”å›
+    # ¼ì²éÄ£°åbinÎÄ¼şÊÇ·ñ´æÔÚ£¬Èç¹ûÃ»ÓĞ£¬Çë¾¡Ôç·µ»Ø
     if (-not (Test-Path $startMenuTemplate)) {
-        Write-Host "Error: æ— æ³•æ›¿æ¢å¼€å§‹èœå•ï¼Œæ‰¾ä¸åˆ°æ¨¡æ¿æ–‡ä»¶" -ForegroundColor Red
+        Write-Host "Error: ÎŞ·¨Ìæ»»¿ªÊ¼²Ëµ¥£¬ÕÒ²»µ½Ä£°åÎÄ¼ş" -ForegroundColor Red
         return
     }
 
     if ([IO.Path]::GetExtension($startMenuTemplate) -ne ".bin" ) {
-        Write-Host "Error: æ— æ³•æ›¿æ¢å¼€å§‹èœå•ï¼Œæ¨¡æ¿æ–‡ä»¶ä¸æ˜¯æœ‰æ•ˆçš„.binæ–‡ä»¶" -ForegroundColor Red
+        Write-Host "Error: ÎŞ·¨Ìæ»»¿ªÊ¼²Ëµ¥£¬Ä£°åÎÄ¼ş²»ÊÇÓĞĞ§µÄ.binÎÄ¼ş" -ForegroundColor Red
         return
     }
 
@@ -733,22 +731,22 @@ function ReplaceStartMenu {
     $backupBinFile = $startMenuBinFile + ".bak"
 
     if (Test-Path $startMenuBinFile) {
-        # å¤‡ä»½å½“å‰å¼€å§‹èœå•æ–‡ä»¶
+        # ±¸·İµ±Ç°¿ªÊ¼²Ëµ¥ÎÄ¼ş
         Move-Item -Path $startMenuBinFile -Destination $backupBinFile -Force
     }
     else {
-        Write-Host "Warning: æ— æ³•æ‰¾åˆ°ç”¨æˆ·çš„åŸå§‹start2.binæ–‡ä»¶ $userName. æœªä¸ºæ­¤ç”¨æˆ·åˆ›å»ºå¤‡ä»½!" -ForegroundColor Yellow
+        Write-Host "Warning: ÎŞ·¨ÕÒµ½ÓÃ»§µÄÔ­Ê¼start2.binÎÄ¼ş $userName. Î´Îª´ËÓÃ»§´´½¨±¸·İ!" -ForegroundColor Yellow
         New-Item -ItemType File -Path $startMenuBinFile -Force
     }
 
-    # å¤åˆ¶æ¨¡æ¿æ–‡ä»¶
+    # ¸´ÖÆÄ£°åÎÄ¼ş
     Copy-Item -Path $startMenuTemplate -Destination $startMenuBinFile -Force
 
-    Write-Output "æ›¿æ¢äº†ç”¨æˆ·çš„â€œå¼€å§‹â€èœå• $userName"
+    Write-Output "Ìæ»»ÁËÓÃ»§µÄ¡°¿ªÊ¼¡±²Ëµ¥ $userName"
 }
 
 
-# å°†å‚æ•°æ·»åŠ åˆ°è„šæœ¬ä¸­å¹¶å†™å…¥æ–‡ä»¶
+# ½«²ÎÊıÌí¼Óµ½½Å±¾ÖĞ²¢Ğ´ÈëÎÄ¼ş
 function AddParameter {
     param (
         $parameterName,
@@ -756,7 +754,7 @@ function AddParameter {
         $addToFile = $true
     )
 
-    # å¦‚æœå¯†é’¥å°šä¸å­˜åœ¨ï¼Œè¯·æ·»åŠ å¯†é’¥
+    # Èç¹ûÃÜÔ¿ÉĞ²»´æÔÚ£¬ÇëÌí¼ÓÃÜÔ¿
     if (-not $script:Params.ContainsKey($parameterName)) {
         $script:Params.Add($parameterName, $true)
     }
@@ -766,7 +764,7 @@ function AddParameter {
         return
     }
 
-    # åˆ›å»ºæˆ–æ¸…é™¤å­˜å‚¨ä¸Šæ¬¡ä½¿ç”¨è®¾ç½®çš„æ–‡ä»¶
+    # ´´½¨»òÇå³ı´æ´¢ÉÏ´ÎÊ¹ÓÃÉèÖÃµÄÎÄ¼ş
     if (-not (Test-Path "$PSScriptRoot/SavedSettings")) {
         $null = New-Item "$PSScriptRoot/SavedSettings"
     }
@@ -776,7 +774,7 @@ function AddParameter {
     
     $script:FirstSelection = $false
 
-    # åˆ›å»ºæ¡ç›®å¹¶å°†å…¶æ·»åŠ åˆ°æ–‡ä»¶ä¸­
+    # ´´½¨ÌõÄ¿²¢½«ÆäÌí¼Óµ½ÎÄ¼şÖĞ
     $entry = "$parameterName#- $message"
     Add-Content -Path "$PSScriptRoot/SavedSettings" -Value $entry
 }
@@ -790,7 +788,7 @@ function PrintHeader {
     $fullTitle = " Win11Debloat Script - $title"
 
     if ($script:Params.ContainsKey("Sysprep")) {
-        $fullTitle = "$fullTitle (ç³»ç»Ÿé¢„åˆ¶æ¨¡å¼)"
+        $fullTitle = "$fullTitle (ÏµÍ³Ô¤ÖÆÄ£Ê½)"
     }
     else {
         $fullTitle = "$fullTitle (User: $(GetUserName))"
@@ -816,7 +814,7 @@ function PrintFromFile {
         PrintHeader $title
     }
 
-    # ä»æ–‡ä»¶ä¸­è·å–å’Œæ‰“å°è„šæœ¬èœå•
+    # ´ÓÎÄ¼şÖĞ»ñÈ¡ºÍ´òÓ¡½Å±¾²Ëµ¥
     Foreach ($line in (Get-Content -Path $path )) {   
         Write-Host $line
     }
@@ -866,18 +864,18 @@ function GetUserName {
 
 
 function CreateSystemRestorePoint {
-    Write-Output "> å°è¯•åˆ›å»ºç³»ç»Ÿæ¢å¤ç‚¹..."
+    Write-Output "> ³¢ÊÔ´´½¨ÏµÍ³»Ö¸´µã..."
     
     $SysRestore = Get-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore" -Name "RPSessionInterval"
 
     if ($SysRestore.RPSessionInterval -eq 0) {
-        if ($Silent -or $( Read-Host -Prompt "ç³»ç»Ÿæ¢å¤è¢«ç¦ç”¨ï¼Œæ‚¨æƒ³å¯ç”¨å®ƒå¹¶åˆ›å»ºä¸€ä¸ªæ¢å¤ç‚¹å—ï¼Ÿ? (y/n)") -eq 'y') {
+        if ($Silent -or $( Read-Host -Prompt "ÏµÍ³»Ö¸´±»½ûÓÃ£¬ÄúÏëÆôÓÃËü²¢´´½¨Ò»¸ö»Ö¸´µãÂğ£¿? (y/n)") -eq 'y') {
             $enableSystemRestoreJob = Start-Job { 
                 try {
                     Enable-ComputerRestore -Drive "$env:SystemDrive"
                 }
                 catch {
-                    Write-Host "Error: æ— æ³•å¯ç”¨â€œç³»ç»Ÿæ¢å¤â€: $_" -ForegroundColor Red
+                    Write-Host "Error: ÎŞ·¨ÆôÓÃ¡°ÏµÍ³»Ö¸´¡±: $_" -ForegroundColor Red
                     return
                 }
             }
@@ -885,7 +883,7 @@ function CreateSystemRestorePoint {
             $enableSystemRestoreJobDone = $enableSystemRestoreJob | Wait-Job -TimeOut 20
 
             if (-not $enableSystemRestoreJobDone) {
-                Write-Host "Error: æ— æ³•å¯ç”¨ç³»ç»Ÿæ¢å¤å’Œåˆ›å»ºæ¢å¤ç‚¹ï¼Œæ“ä½œè¶…æ—¶" -ForegroundColor Red
+                Write-Host "Error: ÎŞ·¨ÆôÓÃÏµÍ³»Ö¸´ºÍ´´½¨»Ö¸´µã£¬²Ù×÷³¬Ê±" -ForegroundColor Red
                 return
             }
             else {
@@ -899,33 +897,33 @@ function CreateSystemRestorePoint {
     }
 
     $createRestorePointJob = Start-Job { 
-        # æŸ¥æ‰¾ä¸åˆ° 24 å°æ—¶çš„ç°æœ‰æ¢å¤ç‚¹
+        # ²éÕÒ²»µ½ 24 Ğ¡Ê±µÄÏÖÓĞ»Ö¸´µã
         try {
             $recentRestorePoints = Get-ComputerRestorePoint | Where-Object { (Get-Date) - [System.Management.ManagementDateTimeConverter]::ToDateTime($_.CreationTime) -le (New-TimeSpan -Hours 24) }
         }
         catch {
-            Write-Host "Error: æ— æ³•æ£€ç´¢ç°æœ‰çš„æ¢å¤ç‚¹: $_" -ForegroundColor Red
+            Write-Host "Error: ÎŞ·¨¼ìË÷ÏÖÓĞµÄ»Ö¸´µã: $_" -ForegroundColor Red
             return
         }
     
         if ($recentRestorePoints.Count -eq 0) {
             try {
                 Checkpoint-Computer -Description "Restore point created by Win11Debloat" -RestorePointType "MODIFY_SETTINGS"
-                Write-Output "ç³»ç»Ÿæ¢å¤ç‚¹åˆ›å»ºæˆåŠŸ"
+                Write-Output "ÏµÍ³»Ö¸´µã´´½¨³É¹¦"
             }
             catch {
-                Write-Host "Error: æ— æ³•åˆ›å»ºæ¢å¤ç‚¹: $_" -ForegroundColor Red
+                Write-Host "Error: ÎŞ·¨´´½¨»Ö¸´µã: $_" -ForegroundColor Red
             }
         }
         else {
-            Write-Host "æœ€è¿‘çš„æ¢å¤ç‚¹å·²ç»å­˜åœ¨ï¼Œæ²¡æœ‰åˆ›å»ºæ–°çš„æ¢å¤ç‚¹." -ForegroundColor Yellow
+            Write-Host "×î½üµÄ»Ö¸´µãÒÑ¾­´æÔÚ£¬Ã»ÓĞ´´½¨ĞÂµÄ»Ö¸´µã." -ForegroundColor Yellow
         }
     }
     
     $createRestorePointJobDone = $createRestorePointJob | Wait-Job -TimeOut 20
 
     if (-not $createRestorePointJobDone) {
-        Write-Host "Error: åˆ›å»ºç³»ç»Ÿæ¢å¤ç‚¹å¤±è´¥ï¼Œæ“ä½œè¶…æ—¶" -ForegroundColor Red
+        Write-Host "Error: ´´½¨ÏµÍ³»Ö¸´µãÊ§°Ü£¬²Ù×÷³¬Ê±" -ForegroundColor Red
     }
     else {
         Receive-Job $createRestorePointJob
@@ -937,23 +935,23 @@ function CreateSystemRestorePoint {
 
 function ShowScriptMenuOptions {
     Do { 
-        $ModeSelectionMessage = "è¯·é€‰æ‹©ä¸€ä¸ªé€‰é¡¹ (1/2/3/0)" 
+        $ModeSelectionMessage = "ÇëÑ¡ÔñÒ»¸öÑ¡Ïî (1/2/3/0)" 
 
         PrintHeader 'Menu'
 
-        Write-Host "(1) é»˜è®¤æ¨¡å¼ï¼šå¿«é€Ÿåº”ç”¨å»ºè®®çš„æ›´æ”¹"
-        Write-Host "(2) è‡ªå®šä¹‰æ¨¡å¼ï¼šæ‰‹åŠ¨é€‰æ‹©è¦è¿›è¡Œçš„æ›´æ”¹"
-        Write-Host "(3) åº”ç”¨ç§»é™¤æ¨¡å¼ï¼šé€‰æ‹©å¹¶ç§»é™¤åº”ç”¨ï¼Œæ— éœ€è¿›è¡Œå…¶ä»–æ›´æ”¹"
+        Write-Host "(1) Ä¬ÈÏÄ£Ê½£º¿ìËÙÓ¦ÓÃ½¨ÒéµÄ¸ü¸Ä"
+        Write-Host "(2) ×Ô¶¨ÒåÄ£Ê½£ºÊÖ¶¯Ñ¡ÔñÒª½øĞĞµÄ¸ü¸Ä"
+        Write-Host "(3) Ó¦ÓÃÒÆ³ıÄ£Ê½£ºÑ¡Ôñ²¢ÒÆ³ıÓ¦ÓÃ£¬ÎŞĞè½øĞĞÆäËû¸ü¸Ä"
 
-        # ä»…å½“SavedSettingsæ–‡ä»¶å­˜åœ¨æ—¶æ‰æ˜¾ç¤ºæ­¤é€‰é¡¹
+        # ½öµ± SavedSettings ÎÄ¼ş´æÔÚÊ±²ÅÏÔÊ¾´ËÑ¡Ïî
         if (Test-Path "$PSScriptRoot/SavedSettings") {
-            Write-Host "(4) åº”ç”¨ä¸Šæ¬¡ä¿å­˜çš„è‡ªå®šä¹‰è®¾ç½®"
+            Write-Host "(4) Ó¦ÓÃÉÏ´Î±£´æµÄ×Ô¶¨ÒåÉèÖÃ"
             
-            $ModeSelectionMessage = "è¯·é€‰æ‹©ä¸€ä¸ªé€‰é¡¹ (1/2/3/4/0)" 
+            $ModeSelectionMessage = "ÇëÑ¡ÔñÒ»¸öÑ¡Ïî (1/2/3/4/0)" 
         }
 
         Write-Host ""
-        Write-Host "(0) æ˜¾ç¤ºæ›´å¤šä¿¡æ¯"
+        Write-Host "(0) ÏÔÊ¾¸ü¶àĞÅÏ¢"
         Write-Host ""
         Write-Host ""
 
@@ -963,7 +961,7 @@ function ShowScriptMenuOptions {
             # Print information screen from file
             PrintFromFile "$PSScriptRoot/Assets/Menus/Info" "Information"
 
-            Write-Host "æŒ‰ä»»æ„é”®è¿”å›..."
+            Write-Host "°´ÈÎÒâ¼ü·µ»Ø..."
             $null = [System.Console]::ReadKey()
         }
         elseif (($Mode -eq '4') -and -not (Test-Path "$PSScriptRoot/SavedSettings")) {
@@ -977,9 +975,9 @@ function ShowScriptMenuOptions {
 
 
 function ShowDefaultMode {
-    AddParameter 'CreateRestorePoint' 'åˆ›å»ºç³»ç»Ÿæ¢å¤ç‚¹' $false
+    AddParameter 'CreateRestorePoint' '´´½¨ÏµÍ³»Ö¸´µã' $false
 
-    # æ˜¾ç¤ºåˆ é™¤åº”ç”¨ç¨‹åºçš„é€‰é¡¹ï¼Œæˆ–è€…å¦‚æœé€šè¿‡äº†RunDefaultsæˆ–RunDefaultsLiteå‚æ•°ï¼Œåˆ™è®¾ç½®é€‰æ‹©
+    # ÏÔÊ¾É¾³ıÓ¦ÓÃ³ÌĞòµÄÑ¡Ïî£¬»òÕßÈç¹ûÍ¨¹ıÁËRunDefaults»òRunDefaultsLite²ÎÊı£¬ÔòÉèÖÃÑ¡Ôñ
     if ($RunDefaults) {
         $RemoveAppsInput = '1'
     }
@@ -990,7 +988,7 @@ function ShowDefaultMode {
         $RemoveAppsInput = ShowDefaultModeAppRemovalOptions
 
         if (($script:selectedApps.contains('Microsoft.XboxGameOverlay') -or $script:selectedApps.contains('Microsoft.XboxGamingOverlay')) -and 
-          $( Read-Host -Prompt "ç¦ç”¨æ¸¸æˆæ é›†æˆå’Œæ¸¸æˆ/å±å¹•å½•åˆ¶ï¼Ÿ è¿™ä¹Ÿé˜»æ­¢äº†ms-gamingoverlayå’Œms-gamebarå¼¹å‡ºçª—å£ (y/n)" ) -eq 'y') {
+          $( Read-Host -Prompt "½ûÓÃÓÎÏ·À¸¼¯³ÉºÍÓÎÏ·/ÆÁÄ»Â¼ÖÆ£¿ ÕâÒ²×èÖ¹ÁË ms-gamingoverlay ºÍ ms-gamebar µ¯³ö´°¿Ú (y/n)" ) -eq 'y') {
             $DisableGameBarIntegrationInput = $true;
         }
     }
@@ -999,7 +997,7 @@ function ShowDefaultMode {
 
     Write-Output "Win11Debloat will make the following changes:"
 
-    # æ ¹æ®ç”¨æˆ·è¾“å…¥é€‰æ‹©æ­£ç¡®çš„é€‰é¡¹
+    # ¸ù¾İÓÃ»§ÊäÈëÑ¡ÔñÕıÈ·µÄÑ¡Ïî
     switch ($RemoveAppsInput) {
         '1' {
             AddParameter 'RemoveApps' 'Remove the default selection of apps:' $false
@@ -1016,16 +1014,16 @@ function ShowDefaultMode {
         AddParameter 'DisableGameBarIntegration' 'Disable Game Bar integration' $false
     }
 
-    # ä»…ä¸ºWindows 10ç”¨æˆ·æ·»åŠ æ­¤é€‰é¡¹
+    # ½öÎª Windows 10 ÓÃ»§Ìí¼Ó´ËÑ¡Ïî
     if (get-ciminstance -query "select caption from win32_operatingsystem where caption like '%Windows 10%'") {
-        AddParameter 'Hide3dObjects' "åœ¨æ–‡ä»¶èµ„æºç®¡ç†å™¨ä¸­éšè—â€œæ­¤ç”µè„‘â€ä¸‹çš„3Då¯¹è±¡æ–‡ä»¶å¤¹" $false
+        AddParameter 'Hide3dObjects' "ÔÚÎÄ¼ş×ÊÔ´¹ÜÀíÆ÷ÖĞÒş²Ø¡°´ËµçÄÔ¡±ÏÂµÄ3D¶ÔÏóÎÄ¼ş¼Ğ" $false
         AddParameter 'HideChat' 'Hide the chat (meet now) icon from the taskbar' $false
     }
 
-    # ä»…ä¸ºWindows 11ç”¨æˆ·æ·»åŠ è¿™äº›é€‰é¡¹ (build 22000+)
+    # ½öÎª Windows 11 ÓÃ»§Ìí¼ÓÕâĞ©Ñ¡Ïî  (build 22000+)
     if ($WinVersion -ge 22000) {
         if ($script:ModernStandbySupported) {
-            AddParameter 'DisableModernStandbyNetworking' 'åœ¨ç°ä»£å¾…æœºæœŸé—´ç¦ç”¨ç½‘ç»œè¿æ¥' $false
+            AddParameter 'DisableModernStandbyNetworking' 'ÔÚÏÖ´ú´ı»úÆÚ¼ä½ûÓÃÍøÂçÁ¬½Ó' $false
         }
 
         AddParameter 'DisableRecall' 'Disable Windows Recall' $false
@@ -1034,9 +1032,9 @@ function ShowDefaultMode {
 
     PrintFromFile "$PSScriptRoot/Assets/Menus/DefaultSettings" "Default Mode" $false
 
-    # å¦‚æœé™éŸ³å‚æ•°å·²é€šè¿‡ï¼Œè¯·æŠ‘åˆ¶æç¤º
+    # Èç¹û¾²Òô²ÎÊıÒÑÍ¨¹ı£¬ÇëÒÖÖÆÌáÊ¾
     if (-not $Silent) {
-        Write-Output "æŒ‰å›è½¦é”®æ‰§è¡Œè„šæœ¬æˆ–æŒ‰CTRL+Cé€€å‡º..."
+        Write-Output "°´»Ø³µ¼üÖ´ĞĞ½Å±¾»ò°´ CTRL+C ÍË³ö..."
         Read-Host | Out-Null
     } 
 
@@ -1044,7 +1042,7 @@ function ShowDefaultMode {
 
     PrintHeader 'Default Mode'
 
-    # æ·»åŠ é»˜è®¤å‚æ•°ï¼Œå¦‚æœå®ƒä»¬å°šæœªå­˜åœ¨
+    # Ìí¼ÓÄ¬ÈÏ²ÎÊı£¬Èç¹ûËüÃÇÉĞÎ´´æÔÚ
     foreach ($ParameterName in $DefaultParameterNames) {
         if (-not $script:Params.ContainsKey($ParameterName)) {
             $script:Params.Add($ParameterName, $true)
@@ -1056,24 +1054,24 @@ function ShowDefaultMode {
 function ShowDefaultModeAppRemovalOptions {
     PrintHeader 'Default Mode'
 
-    Write-Host "è¯·æ³¨æ„ï¼šé»˜è®¤é€‰æ‹©çš„åº”ç”¨ç¨‹åºåŒ…æ‹¬å¾®è½¯å›¢é˜Ÿã€Spotifyã€ä¾¿ç¬ºç­‰ã€‚ é€‰æ‹©é€‰é¡¹2æ¥éªŒè¯å¹¶æ›´æ”¹è„šæœ¬åˆ é™¤çš„åº”ç”¨ç¨‹åº." -ForegroundColor DarkGray
+    Write-Host "Çë×¢Òâ£ºÄ¬ÈÏÑ¡ÔñµÄÓ¦ÓÃ³ÌĞò°üÀ¨Î¢ÈíÍÅ¶Ó¡¢Spotify¡¢±ã¼ãµÈ¡£ Ñ¡ÔñÑ¡Ïî 2 À´ÑéÖ¤²¢¸ü¸Ä½Å±¾É¾³ıµÄÓ¦ÓÃ³ÌĞò." -ForegroundColor DarkGray
     Write-Host ""
 
     Do {
-        Write-Host "é€‰é¡¹:" -ForegroundColor Yellow
-        Write-Host " (n) ä¸è¦åˆ é™¤ä»»ä½•åº”ç”¨ç¨‹åº" -ForegroundColor Yellow
-        Write-Host " (1) åƒ…ç§»é™¤é è¨­çš„æ‡‰ç”¨ç¨‹å¼é¸æ“‡" -ForegroundColor Yellow
-        Write-Host " (2) æ‰‹åŠ¨é€‰æ‹©è¦åˆ é™¤çš„åº”ç”¨ç¨‹åº" -ForegroundColor Yellow
-        $RemoveAppsInput = Read-Hostâ€œæ‚¨è¦ç§»é™¤ä»»ä½•åº”ç”¨ç¨‹åºå—ï¼Ÿ åº”ç”¨ç¨‹åºå°†é’ˆå¯¹æ‰€æœ‰ç”¨æˆ·è¢«åˆ é™¤ (n/1/2)"
+        Write-Host "Ñ¡Ïî:" -ForegroundColor Yellow
+        Write-Host " (n) ²»ÒªÉ¾³ıÈÎºÎÓ¦ÓÃ³ÌĞò" -ForegroundColor Yellow
+        Write-Host " (1) ƒHÒÆ³ıîAÔOµÄ‘ªÓÃ³ÌÊ½ßx“ñ" -ForegroundColor Yellow
+        Write-Host " (2) ÊÖ¶¯Ñ¡ÔñÒªÉ¾³ıµÄÓ¦ÓÃ³ÌĞò" -ForegroundColor Yellow
+        $RemoveAppsInput = Read-Host¡°ÄúÒªÒÆ³ıÈÎºÎÓ¦ÓÃ³ÌĞòÂğ£¿ Ó¦ÓÃ³ÌĞò½«Õë¶ÔËùÓĞÓÃ»§±»É¾³ı (n/1/2)"
 
-        # å¦‚æœç”¨æˆ·è¾“å…¥äº†é€‰é¡¹ï¼Œåˆ™æ˜¾ç¤ºåº”ç”¨ç¨‹åºé€‰æ‹©è¡¨å• 3
+        # Èç¹ûÓÃ»§ÊäÈëÁËÑ¡Ïî£¬ÔòÏÔÊ¾Ó¦ÓÃ³ÌĞòÑ¡Ôñ±íµ¥ 3
         if ($RemoveAppsInput -eq '2') {
             $result = ShowAppSelectionForm
 
             if ($result -ne [System.Windows.Forms.DialogResult]::OK) {
                 # User cancelled or closed app selection, show error and change RemoveAppsInput so the menu will be shown again
                 Write-Host ""
-                Write-Host "å–æ¶ˆç”³è¯·é€‰æ‹©ï¼Œè¯·é‡è¯•" -ForegroundColor Red
+                Write-Host "È¡ÏûÉêÇëÑ¡Ôñ£¬ÇëÖØÊÔ" -ForegroundColor Red
 
                 $RemoveAppsInput = 'c'
             }
@@ -1088,7 +1086,7 @@ function ShowDefaultModeAppRemovalOptions {
 
 
 function ShowCustomModeOptions {
-    # è·å–å½“å‰çš„Windowsæ„å»ºç‰ˆæœ¬ï¼Œä»¥ä¾¿ä¸åŠŸèƒ½è¿›è¡Œæ¯”è¾ƒ
+    # »ñÈ¡µ±Ç°µÄ Windows ¹¹½¨°æ±¾£¬ÒÔ±ãÓë¹¦ÄÜ½øĞĞ±È½Ï
     $WinVersion = Get-ItemPropertyValue 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion' CurrentBuild
             
     PrintHeader 'Custom Mode'
@@ -1097,21 +1095,21 @@ function ShowCustomModeOptions {
 
     # Show options for removing apps, only continue on valid input
     Do {
-        Write-Host "é€‰é¡¹:" -ForegroundColor Yellow
-        Write-Host " (n) ä¸è¦åˆ é™¤ä»»ä½•åº”ç”¨ç¨‹åº" -ForegroundColor Yellow
-        Write-Host " (1) åƒ…ç§»é™¤é è¨­çš„æ‡‰ç”¨ç¨‹å¼é¸æ“‡" -ForegroundColor Yellow
-        Write-Host " (2) åˆ é™¤åº”ç”¨ç¨‹åºçš„é»˜è®¤é€‰æ‹©ï¼Œä»¥åŠé‚®ä»¶å’Œæ—¥å†åº”ç”¨ç¨‹åºä»¥åŠæ¸¸æˆç›¸å…³åº”ç”¨ç¨‹åº"  -ForegroundColor Yellow
-        Write-Host " (3) æ‰‹åŠ¨é€‰æ‹©è¦åˆ é™¤çš„åº”ç”¨ç¨‹åº" -ForegroundColor Yellow
-        $RemoveAppsInput = Read-Host "æ‚¨æƒ³ç§»é™¤ä»»ä½•åº”ç”¨ç¨‹åºå—ï¼Ÿ åº”ç”¨ç¨‹åºå°†é’ˆå¯¹æ‰€æœ‰ç”¨æˆ·è¢«åˆ é™¤ (n/1/2/3)"
+        Write-Host "Ñ¡Ïî:" -ForegroundColor Yellow
+        Write-Host " (n) ²»ÒªÉ¾³ıÈÎºÎÓ¦ÓÃ³ÌĞò" -ForegroundColor Yellow
+        Write-Host " (1) ƒHÒÆ³ıîAÔOµÄ‘ªÓÃ³ÌÊ½ßx“ñ" -ForegroundColor Yellow
+        Write-Host " (2) É¾³ıÓ¦ÓÃ³ÌĞòµÄÄ¬ÈÏÑ¡Ôñ£¬ÒÔ¼°ÓÊ¼şºÍÈÕÀúÓ¦ÓÃ³ÌĞòÒÔ¼°ÓÎÏ·Ïà¹ØÓ¦ÓÃ³ÌĞò"  -ForegroundColor Yellow
+        Write-Host " (3) ÊÖ¶¯Ñ¡ÔñÒªÉ¾³ıµÄÓ¦ÓÃ³ÌĞò" -ForegroundColor Yellow
+        $RemoveAppsInput = Read-Host "ÄúÏëÒÆ³ıÈÎºÎÓ¦ÓÃ³ÌĞòÂğ£¿ Ó¦ÓÃ³ÌĞò½«Õë¶ÔËùÓĞÓÃ»§±»É¾³ı (n/1/2/3)"
 
-        # å¦‚æœç”¨æˆ·è¾“å…¥äº†é€‰é¡¹ï¼Œåˆ™æ˜¾ç¤ºåº”ç”¨ç¨‹åºé€‰æ‹©è¡¨å• 3
+        # Èç¹ûÓÃ»§ÊäÈëÁËÑ¡Ïî£¬ÔòÏÔÊ¾Ó¦ÓÃ³ÌĞòÑ¡Ôñ±íµ¥ 3
         if ($RemoveAppsInput -eq '3') {
             $result = ShowAppSelectionForm
 
             if ($result -ne [System.Windows.Forms.DialogResult]::OK) {
                 # User cancelled or closed app selection, show error and change RemoveAppsInput so the menu will be shown again
                 Write-Output ""
-                Write-Host "å–æ¶ˆç”³è¯·é€‰æ‹©ï¼Œè¯·é‡è¯•" -ForegroundColor Red
+                Write-Host "È¡ÏûÉêÇëÑ¡Ôñ£¬ÇëÖØÊÔ" -ForegroundColor Red
 
                 $RemoveAppsInput = 'c'
             }
@@ -1121,18 +1119,18 @@ function ShowCustomModeOptions {
     }
     while ($RemoveAppsInput -ne 'n' -and $RemoveAppsInput -ne '0' -and $RemoveAppsInput -ne '1' -and $RemoveAppsInput -ne '2' -and $RemoveAppsInput -ne '3') 
 
-    # æ ¹æ®ç”¨æˆ·è¾“å…¥é€‰æ‹©æ­£ç¡®çš„é€‰é¡¹
+    # ¸ù¾İÓÃ»§ÊäÈëÑ¡ÔñÕıÈ·µÄÑ¡Ïî
     switch ($RemoveAppsInput) {
         '1' {
             AddParameter 'RemoveApps' 'Remove the default selection of apps'
         }
         '2' {
-            AddParameter 'RemoveApps' 'ç§»é™¤æ‡‰ç”¨ç¨‹å¼çš„é è¨­é¸æ“‡'
-            AddParameter 'RemoveCommApps' 'ç§»é™¤â€œé‚®ä»¶â€ã€â€œæ—¥å†â€å’Œâ€œäººå‘˜â€åº”ç”¨'
-            AddParameter 'RemoveW11Outlook' 'åˆ é™¤æ–°çš„Outlook for Windowsåº”ç”¨ç¨‹åº'
-            AddParameter 'RemoveGamingApps' 'åˆ é™¤Xboxåº”ç”¨ç¨‹åºå’ŒXboxæ¸¸æˆæ '
-            AddParameter 'DisableDVR' 'åœç”¨Xboxæ¸¸æˆ/å±å¹•å½•åˆ¶'
-            AddParameter 'DisableGameBarIntegration' 'ç¦ç”¨æ¸¸æˆæ é›†æˆ'
+            AddParameter 'RemoveApps' 'ÒÆ³ı‘ªÓÃ³ÌÊ½µÄîAÔOßx“ñ'
+            AddParameter 'RemoveCommApps' 'ÒÆ³ı¡°ÓÊ¼ş¡±¡¢¡°ÈÕÀú¡±ºÍ¡°ÈËÔ±¡±Ó¦ÓÃ'
+            AddParameter 'RemoveW11Outlook' 'É¾³ıĞÂµÄOutlook for WindowsÓ¦ÓÃ³ÌĞò'
+            AddParameter 'RemoveGamingApps' 'É¾³ıXboxÓ¦ÓÃ³ÌĞòºÍXboxÓÎÏ·À¸'
+            AddParameter 'DisableDVR' 'Í£ÓÃ Xbox ÓÎÏ·/ÆÁÄ»Â¼ÖÆ'
+            AddParameter 'DisableGameBarIntegration' '½ûÓÃÓÎÏ·À¸¼¯³É'
         }
         '3' {
             Write-Output "You have selected $($script:SelectedApps.Count) apps for removal"
@@ -1141,22 +1139,22 @@ function ShowCustomModeOptions {
 
             Write-Output ""
 
-            if ($( Read-Host -Prompt "ç¦ç”¨æ¸¸æˆæ é›†æˆå’Œæ¸¸æˆ/å±å¹•å½•åˆ¶ï¼Ÿ è¿™ä¹Ÿé˜»æ­¢äº†ms-gamingoverlayå’Œms-gamebarå¼¹å‡ºçª—å£ (y/n)" ) -eq 'y') {
+            if ($( Read-Host -Prompt "½ûÓÃÓÎÏ·À¸¼¯³ÉºÍÓÎÏ·/ÆÁÄ»Â¼ÖÆ£¿ ÕâÒ²×èÖ¹ÁË ms-gamingoverlay ºÍ ms-gamebar µ¯³ö´°¿Ú (y/n)" ) -eq 'y') {
                 AddParameter 'DisableDVR' 'Disable Xbox game/screen recording'
-                AddParameter 'DisableGameBarIntegration' 'ç¦ç”¨æ¸¸æˆæ é›†æˆ'
+                AddParameter 'DisableGameBarIntegration' '½ûÓÃÓÎÏ·À¸¼¯³É'
             }
         }
     }
 
     Write-Output ""
 
-    if ($( Read-Host -Prompt "ç¦ç”¨é¥æµ‹ã€è¯Šæ–­æ•°æ®ã€æ´»åŠ¨å†å²è®°å½•ã€åº”ç”¨ç¨‹åºå¯åŠ¨è·Ÿè¸ªå’Œå®šå‘å¹¿å‘Š? (y/n)" ) -eq 'y') {
+    if ($( Read-Host -Prompt "½ûÓÃÒ£²â¡¢Õï¶ÏÊı¾İ¡¢»î¶¯ÀúÊ·¼ÇÂ¼¡¢Ó¦ÓÃ³ÌĞòÆô¶¯¸ú×ÙºÍ¶¨Ïò¹ã¸æ? (y/n)" ) -eq 'y') {
         AddParameter 'DisableTelemetry' 'Disable telemetry, diagnostic data, activity history, app-launch tracking & targeted ads'
     }
 
     Write-Output ""
 
-    if ($( Read-Host -Prompt "åœ¨å¼€å§‹ã€è®¾ç½®ã€é€šçŸ¥ã€èµ„æºç®¡ç†å™¨ã€é”å®šå±å¹•å’Œ Edge? (y/n)" ) -eq 'y') {
+    if ($( Read-Host -Prompt "ÔÚ¿ªÊ¼¡¢ÉèÖÃ¡¢Í¨Öª¡¢×ÊÔ´¹ÜÀíÆ÷¡¢Ëø¶¨ÆÁÄ»ºÍ Edge? (y/n)" ) -eq 'y') {
         AddParameter 'DisableSuggestions' 'Disable tips, tricks, suggestions and ads in start, settings, notifications and File Explorer'
         AddParameter 'DisableEdgeAds' 'Disable ads, suggestions and the MSN news feed in Microsoft Edge'
         AddParameter 'DisableSettings365Ads' 'Disable Microsoft 365 ads in Settings Home'
@@ -1165,57 +1163,57 @@ function ShowCustomModeOptions {
 
     Write-Output ""
 
-    if ($( Read-Host -Prompt "ä»Windowsæœç´¢ä¸­ç¦ç”¨å¹¶åˆ é™¤Bingç½‘é¡µæœç´¢ã€Bing AIå’ŒCortana? (y/n)" ) -eq 'y') {
-        AddParameter 'DisableBing' 'ä»Windowsæœç´¢ä¸­ç¦ç”¨å¹¶åˆ é™¤Bingç½‘é¡µæœç´¢ã€Bing AIå’ŒCortana'
+    if ($( Read-Host -Prompt "´ÓWindowsËÑË÷ÖĞ½ûÓÃ²¢É¾³ıBingÍøÒ³ËÑË÷¡¢Bing AIºÍCortana? (y/n)" ) -eq 'y') {
+        AddParameter 'DisableBing' '´ÓWindowsËÑË÷ÖĞ½ûÓÃ²¢É¾³ıBingÍøÒ³ËÑË÷¡¢Bing AIºÍCortana'
     }
 
     # Only show this option for Windows 11 users running build 22621 or later
     if ($WinVersion -ge 22621) {
         Write-Output ""
 
-        # æ˜¾ç¤ºç¦ç”¨/åˆ é™¤äººå·¥æ™ºèƒ½åŠŸèƒ½çš„é€‰é¡¹ï¼Œä»…åœ¨æœ‰æ•ˆè¾“å…¥æ—¶ç»§ç»­
+        # ÏÔÊ¾½ûÓÃ/É¾³ıÈË¹¤ÖÇÄÜ¹¦ÄÜµÄÑ¡Ïî£¬½öÔÚÓĞĞ§ÊäÈëÊ±¼ÌĞø
         Do {
-            Write-Host "é€‰é¡¹:" -ForegroundColor Yellow
-            Write-Host " (n) ä¸è¦ç¦ç”¨ä»»ä½•äººå·¥æ™ºèƒ½åŠŸèƒ½" -ForegroundColor Yellow
-            Write-Host " (1) ç¦ç”¨Microsoft Copilotã€Windowså¬å›å’Œç‚¹å‡»æ“ä½œ" -ForegroundColor Yellow
-            Write-Host " (2) åœ¨Microsoft Edgeã€Paintå’ŒNotepadä¸­ç¦ç”¨Microsoft Copilotã€Windows Recallã€Click to Doå’ŒAIåŠŸèƒ½"  -ForegroundColor Yellow
-            $DisableAIInput = Read-Host "ä½ æƒ³ç¦ç”¨ä»»ä½•äººå·¥æ™ºèƒ½åŠŸèƒ½å—ï¼Ÿ è¿™é€‚ç”¨äºæ‰€æœ‰ç”¨æˆ· (n/1/2)"
+            Write-Host "Ñ¡Ïî:" -ForegroundColor Yellow
+            Write-Host " (n) ²»Òª½ûÓÃÈÎºÎÈË¹¤ÖÇÄÜ¹¦ÄÜ" -ForegroundColor Yellow
+            Write-Host " (1) ½ûÓÃ Microsoft Copilot¡¢Windows ÕÙ»ØºÍµã»÷²Ù×÷" -ForegroundColor Yellow
+            Write-Host " (2) ÔÚ Microsoft Edge¡¢Paint ºÍ Notepad ÖĞ½ûÓÃ Microsoft Copilot¡¢Windows Recall¡¢Click to DoºÍAI¹¦ÄÜ"  -ForegroundColor Yellow
+            $DisableAIInput = Read-Host "ÄãÏë½ûÓÃÈÎºÎÈË¹¤ÖÇÄÜ¹¦ÄÜÂğ£¿ ÕâÊÊÓÃÓÚËùÓĞÓÃ»§ (n/1/2)"
         }
         while ($DisableAIInput -ne 'n' -and $DisableAIInput -ne '0' -and $DisableAIInput -ne '1' -and $DisableAIInput -ne '2') 
 
-        # æ ¹æ®ç”¨æˆ·è¾“å…¥é€‰æ‹©æ­£ç¡®çš„é€‰é¡¹
+        # ¸ù¾İÓÃ»§ÊäÈëÑ¡ÔñÕıÈ·µÄÑ¡Ïî
         switch ($DisableAIInput) {
             '1' {
-                AddParameter 'DisableCopilot' 'ç¦ç”¨å¹¶åˆ é™¤Microsoft Copilot'
-                AddParameter 'DisableRecall' 'åœç”¨Windowså¬å›'
-                AddParameter 'DisableClickToDo' 'ç¦ç”¨ç‚¹å‡»åšï¼ˆäººå·¥æ™ºèƒ½æ–‡æœ¬å’Œå›¾åƒåˆ†æ)'
+                AddParameter 'DisableCopilot' '½ûÓÃ²¢É¾³ıMicrosoft Copilot'
+                AddParameter 'DisableRecall' 'Í£ÓÃ Windows ÕÙ»Ø'
+                AddParameter 'DisableClickToDo' '½ûÓÃµã»÷×ö£¨ÈË¹¤ÖÇÄÜÎÄ±¾ºÍÍ¼Ïñ·ÖÎö)'
             }
             '2' {
-                AddParameter 'DisableCopilot' 'ç¦ç”¨å¹¶åˆ é™¤Microsoft Copilot'
-                AddParameter 'DisableRecall' 'åœç”¨Windowså¬å›'
-                AddParameter 'DisableClickToDo' 'ç¦ç”¨ç‚¹å‡»åšï¼ˆäººå·¥æ™ºèƒ½æ–‡æœ¬å’Œå›¾åƒåˆ†æ)'
-                AddParameter 'DisableEdgeAI' 'ç¦ç”¨äººå·¥æ™ºèƒ½åŠŸèƒ½ Edge'
-                AddParameter 'DisablePaintAI' 'åœ¨Paintä¸­ç¦ç”¨AIåŠŸèƒ½'
-                AddParameter 'DisableNotepadAI' 'ç¦ç”¨è®°äº‹æœ¬ä¸­çš„äººå·¥æ™ºèƒ½åŠŸèƒ½'
+                AddParameter 'DisableCopilot' '½ûÓÃ²¢É¾³ıMicrosoft Copilot'
+                AddParameter 'DisableRecall' 'Í£ÓÃWindowsÕÙ»Ø'
+                AddParameter 'DisableClickToDo' '½ûÓÃµã»÷×ö£¨ÈË¹¤ÖÇÄÜÎÄ±¾ºÍÍ¼Ïñ·ÖÎö)'
+                AddParameter 'DisableEdgeAI' '½ûÓÃÈË¹¤ÖÇÄÜ¹¦ÄÜ Edge'
+                AddParameter 'DisablePaintAI' 'ÔÚPaintÖĞ½ûÓÃAI¹¦ÄÜ'
+                AddParameter 'DisableNotepadAI' '½ûÓÃ¼ÇÊÂ±¾ÖĞµÄÈË¹¤ÖÇÄÜ¹¦ÄÜ'
             }
         }
     }
 
     Write-Output ""
 
-    if ($( Read-Host -Prompt "åœ¨æ¡Œé¢ä¸Šç¦ç”¨Windowsèšå…‰ç¯èƒŒæ™¯? (y/n)" ) -eq 'y') {
+    if ($( Read-Host -Prompt "ÔÚ×ÀÃæÉÏ½ûÓÃ Windows ¾Û¹âµÆ±³¾°? (y/n)" ) -eq 'y') {
         AddParameter 'DisableDesktopSpotlight' 'Disable the Windows Spotlight desktop background option.'
     }
 
     Write-Output ""
 
-    if ($( Read-Host -Prompt "ä¸ºç³»ç»Ÿå’Œåº”ç”¨ç¨‹åºå¯ç”¨æ·±è‰²æ¨¡å¼? (y/n)" ) -eq 'y') {
+    if ($( Read-Host -Prompt "ÎªÏµÍ³ºÍÓ¦ÓÃ³ÌĞòÆôÓÃÉîÉ«Ä£Ê½? (y/n)" ) -eq 'y') {
         AddParameter 'EnableDarkMode' 'Enable dark mode for system and apps'
     }
 
     Write-Output ""
 
-    if ($( Read-Host -Prompt "ç¦ç”¨é€æ˜åº¦ã€åŠ¨ç”»å’Œè§†è§‰æ•ˆæœ? (y/n)" ) -eq 'y') {
+    if ($( Read-Host -Prompt "½ûÓÃÍ¸Ã÷¶È¡¢¶¯»­ºÍÊÓ¾õĞ§¹û? (y/n)" ) -eq 'y') {
         AddParameter 'DisableTransparency' 'Disable transparency effects'
         AddParameter 'DisableAnimations' 'Disable animations and visual effects'
     }
@@ -1224,62 +1222,62 @@ function ShowCustomModeOptions {
     if ($WinVersion -ge 22000) {
         Write-Output ""
 
-        if ($( Read-Host -Prompt "æ¢å¤æ—§çš„Windows 10æ ·å¼ä¸Šä¸‹æ–‡èœå•? (y/n)" ) -eq 'y') {
-            AddParameter 'RevertContextMenu' 'æ¢å¤æ—§çš„Windows 10æ ·å¼ä¸Šä¸‹æ–‡èœå•'
+        if ($( Read-Host -Prompt "»Ö¸´¾ÉµÄ Windows 10 ÑùÊ½ÉÏÏÂÎÄ²Ëµ¥? (y/n)" ) -eq 'y') {
+            AddParameter 'RevertContextMenu' '»Ö¸´¾ÉµÄWindows 10ÑùÊ½ÉÏÏÂÎÄ²Ëµ¥'
         }
     }
 
     Write-Output ""
 
-    if ($( Read-Host -Prompt "å…³é—­å¢å¼ºæŒ‡é’ˆç²¾åº¦ï¼Œä¹Ÿç§°ä¸ºé¼ æ ‡åŠ é€Ÿ? (y/n)" ) -eq 'y') {
-        AddParameter 'DisableMouseAcceleration' 'å…³é—­å¢å¼ºæŒ‡é’ˆç²¾åº¦ï¼ˆé¼ æ ‡åŠ é€Ÿ)'
+    if ($( Read-Host -Prompt "¹Ø±ÕÔöÇ¿Ö¸Õë¾«¶È£¬Ò²³ÆÎªÊó±ê¼ÓËÙ? (y/n)" ) -eq 'y') {
+        AddParameter 'DisableMouseAcceleration' '¹Ø±ÕÔöÇ¿Ö¸Õë¾«¶È£¨Êó±ê¼ÓËÙ)'
     }
 
     # Only show this option for Windows 11 users running build 26100 or later
     if ($WinVersion -ge 26100) {
         Write-Output ""
 
-        if ($( Read-Host -Prompt "ç¦ç”¨ç²˜æ€§é”®é”®ç›˜å¿«æ·é”®? (y/n)" ) -eq 'y') {
-            AddParameter 'DisableStickyKeys' 'ç¦ç”¨ç²˜æ€§é”®é”®ç›˜å¿«æ·é”®'
+        if ($( Read-Host -Prompt "½ûÓÃÕ³ĞÔ¼ü¼üÅÌ¿ì½İ¼ü? (y/n)" ) -eq 'y') {
+            AddParameter 'DisableStickyKeys' '½ûÓÃÕ³ĞÔ¼ü¼üÅÌ¿ì½İ¼ü'
         }
     }
 
     Write-Output ""
 
-    if ($( Read-Host -Prompt "ç¦ç”¨å¿«é€Ÿå¯åŠ¨ï¼Ÿ è¿™é€‚ç”¨äºæ‰€æœ‰ç”¨æˆ· (y/n)" ) -eq 'y') {
+    if ($( Read-Host -Prompt "½ûÓÃ¿ìËÙÆô¶¯£¿ ÕâÊÊÓÃÓÚËùÓĞÓÃ»§ (y/n)" ) -eq 'y') {
         AddParameter 'DisableFastStartup' 'Disable Fast Start-up'
     }
 
-    # ä»…ä¸ºè¿è¡Œ build 22000 æˆ–æ›´é«˜ç‰ˆæœ¬çš„ Windows 11 ç”¨æˆ·æ˜¾ç¤ºæ­¤é€‰é¡¹ï¼Œå¹¶ä¸”æœºå™¨è‡³å°‘æœ‰ä¸€ä¸ªç”µæ± 
+    # ½öÎªÔËĞĞ build 22000 »ò¸ü¸ß°æ±¾µÄ Windows 11 ÓÃ»§ÏÔÊ¾´ËÑ¡Ïî£¬²¢ÇÒ»úÆ÷ÖÁÉÙÓĞÒ»¸öµç³Ø
     if (($WinVersion -ge 22000) -and $script:ModernStandbySupported) {
         Write-Output ""
 
-        if ($( Read-Host -Prompt "åœ¨ç°ä»£å¾…æœºæœŸé—´ç¦ç”¨ç½‘ç»œè¿æ¥ï¼Ÿ è¿™é€‚ç”¨äºæ‰€æœ‰ç”¨æˆ· (y/n)" ) -eq 'y') {
-            AddParameter 'DisableModernStandbyNetworking' 'åœ¨ç°ä»£å¾…æœºæœŸé—´ç¦ç”¨ç½‘ç»œè¿æ¥'
+        if ($( Read-Host -Prompt "ÔÚÏÖ´ú´ı»úÆÚ¼ä½ûÓÃÍøÂçÁ¬½Ó£¿ ÕâÊÊÓÃÓÚËùÓĞÓÃ»§ (y/n)" ) -eq 'y') {
+            AddParameter 'DisableModernStandbyNetworking' 'ÔÚÏÖ´ú´ı»úÆÚ¼ä½ûÓÃÍøÂçÁ¬½Ó'
         }
     }
 
-    # ä»…æ˜¾ç¤ºä¸ºWindows 10ç”¨æˆ·ç¦ç”¨ä¸Šä¸‹æ–‡èœå•é¡¹çš„é€‰é¡¹ï¼Œæˆ–è€…å¦‚æœç”¨æˆ·é€‰æ‹©æ¢å¤Windows 10ä¸Šä¸‹æ–‡èœå•
+    # ½öÏÔÊ¾ÎªWindows 10ÓÃ»§½ûÓÃÉÏÏÂÎÄ²Ëµ¥ÏîµÄÑ¡Ïî£¬»òÕßÈç¹ûÓÃ»§Ñ¡Ôñ»Ö¸´ Windows 10 ÉÏÏÂÎÄ²Ëµ¥
     if ((get-ciminstance -query "select caption from win32_operatingsystem where caption like '%Windows 10%'") -or $script:Params.ContainsKey('RevertContextMenu')) {
         Write-Output ""
 
-        if ($( Read-Host -Prompt "æ‚¨æƒ³ç¦ç”¨ä»»ä½•ä¸Šä¸‹æ–‡èœå•é€‰é¡¹å—? (y/n)" ) -eq 'y') {
+        if ($( Read-Host -Prompt "ÄúÏë½ûÓÃÈÎºÎÉÏÏÂÎÄ²Ëµ¥Ñ¡ÏîÂğ? (y/n)" ) -eq 'y') {
             Write-Output ""
 
-            if ($( Read-Host -Prompt "   åœ¨ä¸Šä¸‹æ–‡èœå•ä¸­éšè—â€œåŒ…å«åœ¨åº“ä¸­â€é€‰é¡¹? (y/n)" ) -eq 'y') {
-                AddParameter 'HideIncludeInLibrary' "åœ¨ä¸Šä¸‹æ–‡èœå•ä¸­éšè—â€œåŒ…å«åœ¨åº“ä¸­â€é€‰é¡¹"
+            if ($( Read-Host -Prompt "   ÔÚÉÏÏÂÎÄ²Ëµ¥ÖĞÒş²Ø¡°°üº¬ÔÚ¿âÖĞ¡±Ñ¡Ïî? (y/n)" ) -eq 'y') {
+                AddParameter 'HideIncludeInLibrary' "ÔÚÉÏÏÂÎÄ²Ëµ¥ÖĞÒş²Ø¡°°üº¬ÔÚ¿âÖĞ¡±Ñ¡Ïî"
             }
 
             Write-Output ""
 
-            if ($( Read-Host -Prompt "   éšè—ä¸Šä¸‹æ–‡èœå•ä¸­çš„â€œæä¾›è®¿é—®æƒé™â€é€‰é¡¹? (y/n)" ) -eq 'y') {
-                AddParameter 'HideGiveAccessTo' "éšè—ä¸Šä¸‹æ–‡èœå•ä¸­çš„â€œæä¾›è®¿é—®æƒé™â€é€‰é¡¹"
+            if ($( Read-Host -Prompt "   Òş²ØÉÏÏÂÎÄ²Ëµ¥ÖĞµÄ¡°Ìá¹©·ÃÎÊÈ¨ÏŞ¡±Ñ¡Ïî? (y/n)" ) -eq 'y') {
+                AddParameter 'HideGiveAccessTo' "Òş²ØÉÏÏÂÎÄ²Ëµ¥ÖĞµÄ¡°Ìá¹©·ÃÎÊÈ¨ÏŞ¡±Ñ¡Ïî"
             }
 
             Write-Output ""
 
-            if ($( Read-Host -Prompt "   åœ¨ä¸Šä¸‹æ–‡èœå•ä¸­éšè—â€œå…±äº«â€é€‰é¡¹? (y/n)" ) -eq 'y') {
-                AddParameter 'HideShare' "åœ¨ä¸Šä¸‹æ–‡èœå•ä¸­éšè—â€œå…±äº«â€é€‰é¡¹"
+            if ($( Read-Host -Prompt "   ÔÚÉÏÏÂÎÄ²Ëµ¥ÖĞÒş²Ø¡°¹²Ïí¡±Ñ¡Ïî? (y/n)" ) -eq 'y') {
+                AddParameter 'HideShare' "ÔÚÉÏÏÂÎÄ²Ëµ¥ÖĞÒş²Ø¡°¹²Ïí¡±Ñ¡Ïî"
             }
         }
     }
@@ -1288,155 +1286,155 @@ function ShowCustomModeOptions {
     if ($WinVersion -ge 22621) {
         Write-Output ""
 
-        if ($( Read-Host -Prompt "ä½ æƒ³å¯¹å¼€å§‹èœå•è¿›è¡Œä»»ä½•æ›´æ”¹å—? (y/n)" ) -eq 'y') {
+        if ($( Read-Host -Prompt "ÄãÏë¶Ô¿ªÊ¼²Ëµ¥½øĞĞÈÎºÎ¸ü¸ÄÂğ? (y/n)" ) -eq 'y') {
             Write-Output ""
 
             if ($script:Params.ContainsKey("Sysprep")) {
-                if ($( Read-Host -Prompt "ä»æ‰€æœ‰ç°æœ‰å’Œæ–°ç”¨æˆ·çš„å¼€å§‹èœå•ä¸­åˆ é™¤æ‰€æœ‰å›ºå®šçš„åº”ç”¨ç¨‹åº? (y/n)" ) -eq 'y') {
-                    AddParameter 'ClearStartAllUsers' 'ä»ç°æœ‰å’Œæ–°ç”¨æˆ·çš„â€œå¼€å§‹â€èœå•ä¸­åˆ é™¤æ‰€æœ‰å›ºå®šçš„åº”ç”¨ç¨‹åº'
+                if ($( Read-Host -Prompt "´ÓËùÓĞÏÖÓĞºÍĞÂÓÃ»§µÄ¿ªÊ¼²Ëµ¥ÖĞÉ¾³ıËùÓĞ¹Ì¶¨µÄÓ¦ÓÃ³ÌĞò? (y/n)" ) -eq 'y') {
+                    AddParameter 'ClearStartAllUsers' '´ÓÏÖÓĞºÍĞÂÓÃ»§µÄ¡°¿ªÊ¼¡±²Ëµ¥ÖĞÉ¾³ıËùÓĞ¹Ì¶¨µÄÓ¦ÓÃ³ÌĞò'
                 }
             }
             else {
                 Do {
-                    Write-Host "   é€‰é¡¹:" -ForegroundColor Yellow
-                    Write-Host "    (n) ä¸è¦ä» "å¼€å§‹" èœå•ä¸­ç§»é™¤ä»»ä½•å›ºå®šçš„åº”ç”¨ç¨‹åº" -ForegroundColor Yellow
-                    Write-Host "    (1) ä»…é’ˆå¯¹æ­¤ç”¨æˆ·ä»å¼€å§‹èœå•ä¸­åˆ é™¤æ‰€æœ‰å›ºå®šçš„åº”ç”¨ç¨‹åº ($(GetUserName))" -ForegroundColor Yellow
-                    Write-Host "    (2) ä»æ‰€æœ‰ç°æœ‰å’Œæ–°ç”¨æˆ·çš„å¼€å§‹èœå•ä¸­åˆ é™¤æ‰€æœ‰å›ºå®šçš„åº”ç”¨ç¨‹åº"  -ForegroundColor Yellow
-                    $ClearStartInput = Read-Host "   ä»å¼€å§‹èœå•ä¸­ç§»é™¤æ‰€æœ‰å›ºå®šçš„åº”ç”¨ç¨‹åº? (n/1/2)" 
+                    Write-Host "   Ñ¡Ïî:" -ForegroundColor Yellow
+                    Write-Host "    (n) ²»Òª´Ó "¿ªÊ¼" ²Ëµ¥ÖĞÒÆ³ıÈÎºÎ¹Ì¶¨µÄÓ¦ÓÃ³ÌĞò" -ForegroundColor Yellow
+                    Write-Host "    (1) ½öÕë¶Ô´ËÓÃ»§´Ó¿ªÊ¼²Ëµ¥ÖĞÉ¾³ıËùÓĞ¹Ì¶¨µÄÓ¦ÓÃ³ÌĞò ($(GetUserName))" -ForegroundColor Yellow
+                    Write-Host "    (2) ´ÓËùÓĞÏÖÓĞºÍĞÂÓÃ»§µÄ¿ªÊ¼²Ëµ¥ÖĞÉ¾³ıËùÓĞ¹Ì¶¨µÄÓ¦ÓÃ³ÌĞò"  -ForegroundColor Yellow
+                    $ClearStartInput = Read-Host "   ´Ó¿ªÊ¼²Ëµ¥ÖĞÒÆ³ıËùÓĞ¹Ì¶¨µÄÓ¦ÓÃ³ÌĞò? (n/1/2)" 
                 }
                 while ($ClearStartInput -ne 'n' -and $ClearStartInput -ne '0' -and $ClearStartInput -ne '1' -and $ClearStartInput -ne '2') 
 
-                # æ ¹æ®ç”¨æˆ·è¾“å…¥é€‰æ‹©æ­£ç¡®çš„é€‰é¡¹
+                # ¸ù¾İÓÃ»§ÊäÈëÑ¡ÔñÕıÈ·µÄÑ¡Ïî
                 switch ($ClearStartInput) {
                     '1' {
-                        AddParameter 'ClearStart' "ä»…é’ˆå¯¹æ­¤ç”¨æˆ·ä»å¼€å§‹èœå•ä¸­åˆ é™¤æ‰€æœ‰å›ºå®šçš„åº”ç”¨ç¨‹åº"
+                        AddParameter 'ClearStart' "½öÕë¶Ô´ËÓÃ»§´Ó¿ªÊ¼²Ëµ¥ÖĞÉ¾³ıËùÓĞ¹Ì¶¨µÄÓ¦ÓÃ³ÌĞò"
                     }
                     '2' {
-                        AddParameter 'ClearStartAllUsers' "ä»æ‰€æœ‰ç°æœ‰å’Œæ–°ç”¨æˆ·çš„å¼€å§‹èœå•ä¸­åˆ é™¤æ‰€æœ‰å›ºå®šçš„åº”ç”¨ç¨‹åº"
+                        AddParameter 'ClearStartAllUsers' "´ÓËùÓĞÏÖÓĞºÍĞÂÓÃ»§µÄ¿ªÊ¼²Ëµ¥ÖĞÉ¾³ıËùÓĞ¹Ì¶¨µÄÓ¦ÓÃ³ÌĞò"
                     }
                 }
             }
 
-            # ä¸è¦ä¸ºè¿è¡Œç‰ˆæœ¬26200 åŠä»¥ä¸Šç‰ˆæœ¬çš„ç”¨æˆ·æ˜¾ç¤ºé€‰é¡¹ï¼Œå› ä¸ºæ­¤ç‰ˆæœ¬ä¸­å·²åˆ é™¤æ­¤è®¾ç½®
+            # ²»ÒªÎªÔËĞĞ°æ±¾26200 ¼°ÒÔÉÏ°æ±¾µÄÓÃ»§ÏÔÊ¾Ñ¡Ïî£¬ÒòÎª´Ë°æ±¾ÖĞÒÑÉ¾³ı´ËÉèÖÃ
             if ($WinVersion -lt 26200) {
                 Write-Output ""
 
-                if ($( Read-Host -Prompt "   ç¦ç”¨ "å¼€å§‹" èœå•ä¸­çš„æ¨èéƒ¨åˆ†ï¼Ÿ è¿™é€‚ç”¨äºæ‰€æœ‰ç”¨æˆ· (y/n)" ) -eq 'y') {
-                    AddParameter 'DisableStartRecommended' 'ç¦ç”¨å¼€å§‹èœå•ä¸­çš„æ¨èéƒ¨åˆ†.'
+                if ($( Read-Host -Prompt "   ½ûÓÃ "¿ªÊ¼" ²Ëµ¥ÖĞµÄÍÆ¼ö²¿·Ö£¿ ÕâÊÊÓÃÓÚËùÓĞÓÃ»§ (y/n)" ) -eq 'y') {
+                    AddParameter 'DisableStartRecommended' '½ûÓÃ¿ªÊ¼²Ëµ¥ÖĞµÄÍÆ¼ö²¿·Ö.'
                 }
             }
 
             Write-Output ""
 
-            if ($( Read-Host -Prompt "   åœ¨å¼€å§‹èœå•ä¸­ç¦ç”¨Phone Linkç§»åŠ¨è®¾å¤‡é›†æˆ? (y/n)" ) -eq 'y') {
-                AddParameter 'DisableStartPhoneLink' 'åœ¨å¼€å§‹èœå•ä¸­ç¦ç”¨ Phone Link ç§»åŠ¨è®¾å¤‡é›†æˆ.'
+            if ($( Read-Host -Prompt "   ÔÚ¿ªÊ¼²Ëµ¥ÖĞ½ûÓÃPhone LinkÒÆ¶¯Éè±¸¼¯³É? (y/n)" ) -eq 'y') {
+                AddParameter 'DisableStartPhoneLink' 'ÔÚ¿ªÊ¼²Ëµ¥ÖĞ½ûÓÃ Phone Link ÒÆ¶¯Éè±¸¼¯³É.'
             }
         }
     }
 
     Write-Output ""
 
-    if ($( Read-Host -Prompt "æ‚¨æƒ³å¯¹ä»»åŠ¡æ å’Œç›¸å…³æœåŠ¡è¿›è¡Œä»»ä½•æ›´æ”¹å—? (y/n)" ) -eq 'y') {
+    if ($( Read-Host -Prompt "ÄúÏë¶ÔÈÎÎñÀ¸ºÍÏà¹Ø·şÎñ½øĞĞÈÎºÎ¸ü¸ÄÂğ? (y/n)" ) -eq 'y') {
         # Only show these specific options for Windows 11 users running build 22000 or later
         if ($WinVersion -ge 22000) {
             Write-Output ""
 
-            if ($( Read-Host -Prompt "   Aå·¦ä¾§çš„å·¥ä½œåˆ—æŒ‰é’®? (y/n)" ) -eq 'y') {
+            if ($( Read-Host -Prompt "   A×ó²àµÄ¹¤×÷ÁĞ°´Å¥? (y/n)" ) -eq 'y') {
                 AddParameter 'TaskbarAlignLeft' 'Align taskbar icons to the left'
             }
 
-            # åœ¨ä»»åŠ¡æ ä¸Šæ˜¾ç¤ºç»„åˆå›¾æ ‡çš„é€‰é¡¹ï¼Œä»…åœ¨æœ‰æ•ˆè¾“å…¥æ—¶ç»§ç»­
+            # ÔÚÈÎÎñÀ¸ÉÏÏÔÊ¾×éºÏÍ¼±êµÄÑ¡Ïî£¬½öÔÚÓĞĞ§ÊäÈëÊ±¼ÌĞø
             Do {
                 Write-Output ""
-                Write-Host "   é€‰é¡¹:" -ForegroundColor Yellow
-                Write-Host "    (n) ä¸ä¿®æ”¹" -ForegroundColor Yellow
-                Write-Host "    (1) æ€»æ˜¯" -ForegroundColor Yellow
-                Write-Host "    (2) å½“ä»»åŠ¡æ å·²æ»¡æ—¶" -ForegroundColor Yellow
-                Write-Host "    (3) ä»ä¸" -ForegroundColor Yellow
+                Write-Host "   Ñ¡Ïî:" -ForegroundColor Yellow
+                Write-Host "    (n) ²»ĞŞ¸Ä" -ForegroundColor Yellow
+                Write-Host "    (1) ×ÜÊÇ" -ForegroundColor Yellow
+                Write-Host "    (2) µ±ÈÎÎñÀ¸ÒÑÂúÊ±" -ForegroundColor Yellow
+                Write-Host "    (3) ´Ó²»" -ForegroundColor Yellow
                 $TbCombineTaskbar = Read-Host "   Combine taskbar buttons and hide labels? (n/1/2/3)" 
             }
             while ($TbCombineTaskbar -ne 'n' -and $TbCombineTaskbar -ne '0' -and $TbCombineTaskbar -ne '1' -and $TbCombineTaskbar -ne '2' -and $TbCombineTaskbar -ne '3') 
 
-            # æ ¹æ®ç”¨æˆ·è¾“å…¥é€‰æ‹©æ­£ç¡®çš„ä»»åŠ¡æ ç»„é€‰é¡¹
+            # ¸ù¾İÓÃ»§ÊäÈëÑ¡ÔñÕıÈ·µÄÈÎÎñÀ¸×éÑ¡Ïî
             switch ($TbCombineTaskbar) {
                 '1' {
-                    AddParameter 'CombineTaskbarAlways' 'å§‹ç»ˆåˆå¹¶å·¥ä½œåˆ—æŒ‰é’®å¹¶éšè—ä¸»æ˜¾ç¤ºå™¨çš„æ ‡ç­¾'
-                    AddParameter 'CombineMMTaskbarAlways' 'å§‹ç»ˆåˆå¹¶ä»»åŠ¡æ æŒ‰é’®å¹¶éšè—äºŒçº§æ˜¾ç¤ºå™¨çš„æ ‡ç­¾'
+                    AddParameter 'CombineTaskbarAlways' 'Ê¼ÖÕºÏ²¢¹¤×÷ÁĞ°´Å¥²¢Òş²ØÖ÷ÏÔÊ¾Æ÷µÄ±êÇ©'
+                    AddParameter 'CombineMMTaskbarAlways' 'Ê¼ÖÕºÏ²¢ÈÎÎñÀ¸°´Å¥²¢Òş²Ø¶ş¼¶ÏÔÊ¾Æ÷µÄ±êÇ©'
                 }
                 '2' {
-                    AddParameter 'CombineTaskbarWhenFull' 'å½“ä¸»æ˜¾ç¤ºå™¨çš„å·¥ä½œåˆ—å·²æ»¡æ—¶ï¼Œåˆå¹¶ä»»åŠ¡æ æŒ‰é’®å¹¶éšè—æ ‡ç­¾'
-                    AddParameter 'CombineMMTaskbarWhenFull' 'å½“ä»»åŠ¡æ å·²æ»¡æ—¶ï¼Œå°†ä»»åŠ¡æ æŒ‰é’®åˆå¹¶å¹¶éšè—äºŒçº§æ˜¾ç¤ºå™¨çš„æ ‡ç­¾'
+                    AddParameter 'CombineTaskbarWhenFull' 'µ±Ö÷ÏÔÊ¾Æ÷µÄ¹¤×÷ÁĞÒÑÂúÊ±£¬ºÏ²¢ÈÎÎñÀ¸°´Å¥²¢Òş²Ø±êÇ©'
+                    AddParameter 'CombineMMTaskbarWhenFull' 'µ±ÈÎÎñÀ¸ÒÑÂúÊ±£¬½«ÈÎÎñÀ¸°´Å¥ºÏ²¢²¢Òş²Ø¶ş¼¶ÏÔÊ¾Æ÷µÄ±êÇ©'
                 }
                 '3' {
-                    AddParameter 'CombineTaskbarNever' 'åˆ‡å‹¿å°†ä»»åŠ¡æ æŒ‰é’®ç»„åˆåœ¨ä¸€èµ·ï¼Œå¹¶æ˜¾ç¤ºä¸»æ˜¾ç¤ºå™¨çš„æ ‡ç­¾'
-                    AddParameter 'CombineMMTaskbarNever' 'åˆ‡å‹¿å°†ä»»åŠ¡æ æŒ‰é’®åˆå¹¶ä¸ºè¾…åŠ©æ˜¾ç¤ºå™¨æ˜¾ç¤ºæ ‡ç­¾'
+                    AddParameter 'CombineTaskbarNever' 'ÇĞÎğ½«ÈÎÎñÀ¸°´Å¥×éºÏÔÚÒ»Æğ£¬²¢ÏÔÊ¾Ö÷ÏÔÊ¾Æ÷µÄ±êÇ©'
+                    AddParameter 'CombineMMTaskbarNever' 'ÇĞÎğ½«ÈÎÎñÀ¸°´Å¥ºÏ²¢Îª¸¨ÖúÏÔÊ¾Æ÷ÏÔÊ¾±êÇ©'
                 }
             }
 
             # Show options for changing on what taskbar(s) app icons are shown, only continue on valid input
             Do {
                 Write-Output ""
-                Write-Host "   é€‰é¡¹:" -ForegroundColor Yellow
-                Write-Host "    (n) ä¸ä¿®æ”¹" -ForegroundColor Yellow
-                Write-Host "    (1) åœ¨æ‰€æœ‰ä»»åŠ¡æ ä¸Šæ˜¾ç¤ºåº”ç”¨ç¨‹åºå›¾æ ‡" -ForegroundColor Yellow
-                Write-Host "    (2) åœ¨ä¸»ä»»åŠ¡æ å’Œçª—å£æ‰“å¼€çš„å·¥ä½œåˆ—ä¸Šæ˜¾ç¤ºåº”ç”¨ç¨‹åºå›¾æ ‡" -ForegroundColor Yellow
-                Write-Host "    (3) ä»…åœ¨çª—å£æ‰“å¼€çš„å·¥ä½œåˆ—ä¸Šæ˜¾ç¤ºåº”ç”¨ç¨‹åºå›¾æ ‡" -ForegroundColor Yellow
+                Write-Host "   Ñ¡Ïî:" -ForegroundColor Yellow
+                Write-Host "    (n) ²»ĞŞ¸Ä" -ForegroundColor Yellow
+                Write-Host "    (1) ÔÚËùÓĞÈÎÎñÀ¸ÉÏÏÔÊ¾Ó¦ÓÃ³ÌĞòÍ¼±ê" -ForegroundColor Yellow
+                Write-Host "    (2) ÔÚÖ÷ÈÎÎñÀ¸ºÍ´°¿Ú´ò¿ªµÄ¹¤×÷ÁĞÉÏÏÔÊ¾Ó¦ÓÃ³ÌĞòÍ¼±ê" -ForegroundColor Yellow
+                Write-Host "    (3) ½öÔÚ´°¿Ú´ò¿ªµÄ¹¤×÷ÁĞÉÏÏÔÊ¾Ó¦ÓÃ³ÌĞòÍ¼±ê" -ForegroundColor Yellow
                 $TbCombineTaskbar = Read-Host "   Change how to show app icons on the taskbar when using multiple monitors? (n/1/2/3)" 
             }
             while ($TbCombineTaskbar -ne 'n' -and $TbCombineTaskbar -ne '0' -and $TbCombineTaskbar -ne '1' -and $TbCombineTaskbar -ne '2' -and $TbCombineTaskbar -ne '3') 
 
-            # æ ¹æ®ç”¨æˆ·è¾“å…¥é€‰æ‹©æ­£ç¡®çš„ä»»åŠ¡æ ç»„é€‰é¡¹
+            # ¸ù¾İÓÃ»§ÊäÈëÑ¡ÔñÕıÈ·µÄÈÎÎñÀ¸×éÑ¡Ïî
             switch ($TbCombineTaskbar) {
                 '1' {
-                    AddParameter 'MMTaskbarModeAll' 'åœ¨æ‰€æœ‰ä»»åŠ¡æ ä¸Šæ˜¾ç¤ºåº”ç”¨ç¨‹åºå›¾æ ‡'
+                    AddParameter 'MMTaskbarModeAll' 'ÔÚËùÓĞÈÎÎñÀ¸ÉÏÏÔÊ¾Ó¦ÓÃ³ÌĞòÍ¼±ê'
                 }
                 '2' {
-                    AddParameter 'MMTaskbarModeMainActive' 'åœ¨ä¸»ä»»åŠ¡æ å’Œçª—å£æ‰“å¼€çš„å·¥ä½œåˆ—ä¸Šæ˜¾ç¤ºåº”ç”¨ç¨‹åºå›¾æ ‡'
+                    AddParameter 'MMTaskbarModeMainActive' 'ÔÚÖ÷ÈÎÎñÀ¸ºÍ´°¿Ú´ò¿ªµÄ¹¤×÷ÁĞÉÏÏÔÊ¾Ó¦ÓÃ³ÌĞòÍ¼±ê'
                 }
                 '3' {
-                    AddParameter 'MMTaskbarModeActive' 'ä»…åœ¨çª—å£æ‰“å¼€çš„å·¥ä½œåˆ—ä¸Šæ˜¾ç¤ºåº”ç”¨ç¨‹åºå›¾æ ‡'
+                    AddParameter 'MMTaskbarModeActive' '½öÔÚ´°¿Ú´ò¿ªµÄ¹¤×÷ÁĞÉÏÏÔÊ¾Ó¦ÓÃ³ÌĞòÍ¼±ê'
                 }
             }
 
-            # åœ¨å·¥ä½œåˆ—ä¸Šæ˜¾ç¤ºæœç´¢å›¾æ ‡çš„é€‰é¡¹ï¼Œä»…åœ¨æœ‰æ•ˆè¾“å…¥æ—¶ç»§ç»­
+            # ÔÚ¹¤×÷ÁĞÉÏÏÔÊ¾ËÑË÷Í¼±êµÄÑ¡Ïî£¬½öÔÚÓĞĞ§ÊäÈëÊ±¼ÌĞø
             Do {
                 Write-Output ""
-                Write-Host "   é€‰é¡¹:" -ForegroundColor Yellow
-                Write-Host "    (n) ä¸ä¿®æ”¹" -ForegroundColor Yellow
-                Write-Host "    (1) ä»ä»»åŠ¡æ ä¸­éšè—æœç´¢å›¾æ ‡" -ForegroundColor Yellow
-                Write-Host "    (2) åœ¨ä»»åŠ¡æ ä¸Šæ˜¾ç¤ºæœç´¢å›¾æ ‡" -ForegroundColor Yellow
-                Write-Host "    (3) åœ¨å·¥ä½œåˆ—ä¸Šæ˜¾ç¤ºå¸¦æœ‰æ ‡ç­¾çš„æœç´¢å›¾æ ‡" -ForegroundColor Yellow
-                Write-Host "    (4) åœ¨ä»»åŠ¡æ ä¸Šæ˜¾ç¤ºæœç´¢æ¡†" -ForegroundColor Yellow
+                Write-Host "   Ñ¡Ïî:" -ForegroundColor Yellow
+                Write-Host "    (n) ²»ĞŞ¸Ä" -ForegroundColor Yellow
+                Write-Host "    (1) ´ÓÈÎÎñÀ¸ÖĞÒş²ØËÑË÷Í¼±ê" -ForegroundColor Yellow
+                Write-Host "    (2) ÔÚÈÎÎñÀ¸ÉÏÏÔÊ¾ËÑË÷Í¼±ê" -ForegroundColor Yellow
+                Write-Host "    (3) ÔÚ¹¤×÷ÁĞÉÏÏÔÊ¾´øÓĞ±êÇ©µÄËÑË÷Í¼±ê" -ForegroundColor Yellow
+                Write-Host "    (4) ÔÚÈÎÎñÀ¸ÉÏÏÔÊ¾ËÑË÷¿ò" -ForegroundColor Yellow
                 $TbSearchInput = Read-Host "   Hide or change the search icon on the taskbar? (n/1/2/3/4)" 
             }
             while ($TbSearchInput -ne 'n' -and $TbSearchInput -ne '0' -and $TbSearchInput -ne '1' -and $TbSearchInput -ne '2' -and $TbSearchInput -ne '3' -and $TbSearchInput -ne '4') 
 
-            # æ ¹æ®ç”¨æˆ·è¾“å…¥é€‰æ‹©æ­£ç¡®çš„ä»»åŠ¡æ æœç´¢é€‰é¡¹
+            # ¸ù¾İÓÃ»§ÊäÈëÑ¡ÔñÕıÈ·µÄÈÎÎñÀ¸ËÑË÷Ñ¡Ïî
             switch ($TbSearchInput) {
                 '1' {
-                    AddParameter 'éšè—æœç´¢Tb' 'ä»ä»»åŠ¡æ ä¸­éšè—æœç´¢å›¾æ ‡'
+                    AddParameter 'Òş²ØËÑË÷Tb' '´ÓÈÎÎñÀ¸ÖĞÒş²ØËÑË÷Í¼±ê'
                 }
                 '2' {
-                    AddParameter 'æ˜¾ç¤ºæœç´¢å›¾æ ‡Tb' 'åœ¨ä»»åŠ¡æ ä¸Šæ˜¾ç¤ºæœç´¢å›¾æ ‡'
+                    AddParameter 'ÏÔÊ¾ËÑË÷Í¼±êTb' 'ÔÚÈÎÎñÀ¸ÉÏÏÔÊ¾ËÑË÷Í¼±ê'
                 }
                 '3' {
-                    AddParameter 'æ˜¾ç¤ºæœç´¢æ ‡ç­¾Tb' 'åœ¨å·¥ä½œåˆ—ä¸Šæ˜¾ç¤ºå¸¦æœ‰æ ‡ç­¾çš„æœç´¢å›¾æ ‡'
+                    AddParameter 'ÏÔÊ¾ËÑË÷±êÇ©Tb' 'ÔÚ¹¤×÷ÁĞÉÏÏÔÊ¾´øÓĞ±êÇ©µÄËÑË÷Í¼±ê'
                 }
                 '4' {
-                    AddParameter 'æ˜¾ç¤ºæœç´¢æ¡†Tb' 'åœ¨ä»»åŠ¡æ ä¸Šæ˜¾ç¤ºæœç´¢æ¡†'
+                    AddParameter 'ÏÔÊ¾ËÑË÷¿òTb' 'ÔÚÈÎÎñÀ¸ÉÏÏÔÊ¾ËÑË÷¿ò'
                 }
             }
 
             Write-Output ""
 
-            if ($( Read-Host -Prompt "   ä»ä»»åŠ¡æ ä¸­éšè—ä»»åŠ¡è§†å›¾æŒ‰é’®? (y/n)" ) -eq 'y') {
+            if ($( Read-Host -Prompt "   ´ÓÈÎÎñÀ¸ÖĞÒş²ØÈÎÎñÊÓÍ¼°´Å¥? (y/n)" ) -eq 'y') {
                 AddParameter 'HideTaskview' 'Hide the taskview button from the taskbar'
             }
         }
 
         Write-Output ""
 
-        if ($( Read-Host -Prompt "   ç¦ç”¨å°éƒ¨ä»¶æœåŠ¡ä»¥åˆ é™¤ä»»åŠ¡æ å’Œé”å±ä¸Šçš„å°éƒ¨ä»¶? (y/n)" ) -eq 'y') {
+        if ($( Read-Host -Prompt "   ½ûÓÃĞ¡²¿¼ş·şÎñÒÔÉ¾³ıÈÎÎñÀ¸ºÍËøÆÁÉÏµÄĞ¡²¿¼ş? (y/n)" ) -eq 'y') {
             AddParameter 'DisableWidgets' 'Disable widgets on the taskbar & lockscreen'
         }
 
@@ -1444,7 +1442,7 @@ function ShowCustomModeOptions {
         if ($WinVersion -le 22621) {
             Write-Output ""
 
-            if ($( Read-Host -Prompt "   ä»ä»»åŠ¡æ ä¸­éšè—èŠå¤©(ç«‹å³è§é¢)å›¾æ ‡? (y/n)" ) -eq 'y') {
+            if ($( Read-Host -Prompt "   ´ÓÈÎÎñÀ¸ÖĞÒş²ØÁÄÌì(Á¢¼´¼ûÃæ)Í¼±ê? (y/n)" ) -eq 'y') {
                 AddParameter 'HideChat' 'Hide the chat (meet now) icon from the taskbar'
             }
         }
@@ -1453,58 +1451,58 @@ function ShowCustomModeOptions {
         if ($WinVersion -ge 22631) {
             Write-Output ""
 
-            if ($( Read-Host -Prompt "   åœ¨ä»»åŠ¡æ å³é”®å•å‡»èœå•ä¸­å¯ç”¨ "ç»“æŸä»»åŠ¡" é€‰é¡¹? (y/n)" ) -eq 'y') {
+            if ($( Read-Host -Prompt "   ÔÚÈÎÎñÀ¸ÓÒ¼üµ¥»÷²Ëµ¥ÖĞÆôÓÃ "½áÊøÈÎÎñ" Ñ¡Ïî? (y/n)" ) -eq 'y') {
                 AddParameter 'EnableEndTask' "Enable the 'End Task' option in the taskbar right click menu"
             }
         }
         
         Write-Output ""
-        if ($( Read-Host -Prompt "   åœ¨ä»»åŠ¡æ åº”ç”¨ç¨‹åºåŒºåŸŸä¸­å¯ç”¨ "æœ€åæ´»è·ƒç‚¹å‡»" è¡Œä¸º? (y/n)" ) -eq 'y') {
+        if ($( Read-Host -Prompt "   ÔÚÈÎÎñÀ¸Ó¦ÓÃ³ÌĞòÇøÓòÖĞÆôÓÃ "×îºó»îÔ¾µã»÷" ĞĞÎª? (y/n)" ) -eq 'y') {
             AddParameter 'EnableLastActiveClick' "Enable the 'Last Active Click' behavior in the taskbar app area"
         }
     }
 
     Write-Output ""
 
-    if ($( Read-Host -Prompt "æ‚¨æƒ³å¯¹æ–‡ä»¶èµ„æºç®¡ç†å™¨è¿›è¡Œä»»ä½•æ›´æ”¹å—? (y/n)" ) -eq 'y') {
+    if ($( Read-Host -Prompt "ÄúÏë¶ÔÎÄ¼ş×ÊÔ´¹ÜÀíÆ÷½øĞĞÈÎºÎ¸ü¸ÄÂğ? (y/n)" ) -eq 'y') {
         # Show options for changing the File Explorer default location
         Do {
             Write-Output ""
             Write-Host "   Options:" -ForegroundColor Yellow
-            Write-Host "    (n) ä¸æ”¹å˜" -ForegroundColor Yellow
-            Write-Host "    (1) æ‰“å¼€æ–‡ä»¶èµ„æºç®¡ç†å™¨ä»¥ 'Home'" -ForegroundColor Yellow
-            Write-Host "    (2) æ‰“å¼€æ–‡ä»¶èµ„æºç®¡ç†å™¨ä»¥ 'This PC'" -ForegroundColor Yellow
-            Write-Host "    (3) æ‰“å¼€æ–‡ä»¶èµ„æºç®¡ç†å™¨ä»¥ 'Downloads'" -ForegroundColor Yellow
-            Write-Host "    (4) æ‰“å¼€æ–‡ä»¶èµ„æºç®¡ç†å™¨ä»¥ 'OneDrive'" -ForegroundColor Yellow
-            $ExplSearchInput = Read-Host "   æ›´æ”¹æ–‡ä»¶èµ„æºç®¡ç†å™¨æ‰“å¼€çš„é»˜è®¤ä½ç½®? (n/1/2/3/4)" 
+            Write-Host "    (n) ²»¸Ä±ä" -ForegroundColor Yellow
+            Write-Host "    (1) ´ò¿ªÎÄ¼ş×ÊÔ´¹ÜÀíÆ÷ÒÔ 'Home'" -ForegroundColor Yellow
+            Write-Host "    (2) ´ò¿ªÎÄ¼ş×ÊÔ´¹ÜÀíÆ÷ÒÔ 'This PC'" -ForegroundColor Yellow
+            Write-Host "    (3) ´ò¿ªÎÄ¼ş×ÊÔ´¹ÜÀíÆ÷ÒÔ 'Downloads'" -ForegroundColor Yellow
+            Write-Host "    (4) ´ò¿ªÎÄ¼ş×ÊÔ´¹ÜÀíÆ÷ÒÔ 'OneDrive'" -ForegroundColor Yellow
+            $ExplSearchInput = Read-Host "   ¸ü¸ÄÎÄ¼ş×ÊÔ´¹ÜÀíÆ÷´ò¿ªµÄÄ¬ÈÏÎ»ÖÃ? (n/1/2/3/4)" 
         }
         while ($ExplSearchInput -ne 'n' -and $ExplSearchInput -ne '0' -and $ExplSearchInput -ne '1' -and $ExplSearchInput -ne '2' -and $ExplSearchInput -ne '3' -and $ExplSearchInput -ne '4') 
 
-        # æ ¹æ®ç”¨æˆ·è¾“å…¥é€‰æ‹©æ­£ç¡®çš„ä»»åŠ¡æ æœç´¢é€‰é¡¹
+        # ¸ù¾İÓÃ»§ÊäÈëÑ¡ÔñÕıÈ·µÄÈÎÎñÀ¸ËÑË÷Ñ¡Ïî
         switch ($ExplSearchInput) {
             '1' {
-                AddParameter 'ExplorerToHome' "æ›´æ”¹æ–‡ä»¶èµ„æºç®¡ç†å™¨æ‰“å¼€çš„é»˜è®¤ä½ç½® 'Home'"
+                AddParameter 'ExplorerToHome' "¸ü¸ÄÎÄ¼ş×ÊÔ´¹ÜÀíÆ÷´ò¿ªµÄÄ¬ÈÏÎ»ÖÃ 'Home'"
             }
             '2' {
-                AddParameter 'ExplorerToThisPC' "æ›´æ”¹æ–‡ä»¶èµ„æºç®¡ç†å™¨æ‰“å¼€çš„é»˜è®¤ä½ç½® 'è¿™å°ç”µè„‘'"
+                AddParameter 'ExplorerToThisPC' "¸ü¸ÄÎÄ¼ş×ÊÔ´¹ÜÀíÆ÷´ò¿ªµÄÄ¬ÈÏÎ»ÖÃ 'ÕâÌ¨µçÄÔ'"
             }
             '3' {
-                AddParameter 'ExplorerToDownloads' "æ›´æ”¹æ–‡ä»¶èµ„æºç®¡ç†å™¨æ‰“å¼€çš„é»˜è®¤ä½ç½® 'ä¸‹è½½'"
+                AddParameter 'ExplorerToDownloads' "¸ü¸ÄÎÄ¼ş×ÊÔ´¹ÜÀíÆ÷´ò¿ªµÄÄ¬ÈÏÎ»ÖÃ 'ÏÂÔØ'"
             }
             '4' {
-                AddParameter 'ExplorerToOneDrive' "æ›´æ”¹æ–‡ä»¶èµ„æºç®¡ç†å™¨æ‰“å¼€çš„é»˜è®¤ä½ç½® 'OneDrive'"
+                AddParameter 'ExplorerToOneDrive' "¸ü¸ÄÎÄ¼ş×ÊÔ´¹ÜÀíÆ÷´ò¿ªµÄÄ¬ÈÏÎ»ÖÃ 'OneDrive'"
             }
         }
 
         Write-Output ""
 
-        if ($( Read-Host -Prompt "   æ˜¾ç¤ºéšè—çš„æ–‡ä»¶,æ–‡ä»¶å¤¹å’Œé©±åŠ¨å™¨? (y/n)" ) -eq 'y') {
+        if ($( Read-Host -Prompt "   ÏÔÊ¾Òş²ØµÄÎÄ¼ş,ÎÄ¼ş¼ĞºÍÇı¶¯Æ÷? (y/n)" ) -eq 'y') {
             AddParameter 'ShowHiddenFolders' 'Show hidden files, folders and drives'
         }
 
         Write-Output ""
 
-        if ($( Read-Host -Prompt "   é¡¯ç¤ºå·²çŸ¥æª”æ¡ˆå‹åˆ¥çš„å‰¯æª”å? (y/n)" ) -eq 'y') {
+        if ($( Read-Host -Prompt "   ï@Ê¾ÒÑÖª™n°¸ĞÍ„eµÄ¸±™nÃû? (y/n)" ) -eq 'y') {
             AddParameter 'ShowKnownFileExt' 'Show file extensions for known file types'
         }
 
@@ -1512,55 +1510,55 @@ function ShowCustomModeOptions {
         if ($WinVersion -ge 22000) {
             Write-Output ""
 
-            if ($( Read-Host -Prompt "   ä»æ–‡ä»¶èµ„æºç®¡ç†å™¨ä¾§é¢æ¿ä¸­éšè—ä¸»é¡µéƒ¨åˆ†? (y/n)" ) -eq 'y') {
+            if ($( Read-Host -Prompt "   ´ÓÎÄ¼ş×ÊÔ´¹ÜÀíÆ÷²àÃæ°åÖĞÒş²ØÖ÷Ò³²¿·Ö? (y/n)" ) -eq 'y') {
                 AddParameter 'HideHome' 'Hide the Home section from the File Explorer sidepanel'
             }
 
             Write-Output ""
 
-            if ($( Read-Host -Prompt "   ä»æ–‡ä»¶èµ„æºç®¡ç†å™¨ä¾§é¢æ¿ä¸­éšè—ç”»å»Šéƒ¨åˆ†? (y/n)" ) -eq 'y') {
+            if ($( Read-Host -Prompt "   ´ÓÎÄ¼ş×ÊÔ´¹ÜÀíÆ÷²àÃæ°åÖĞÒş²Ø»­ÀÈ²¿·Ö? (y/n)" ) -eq 'y') {
                 AddParameter 'HideGallery' 'Hide the Gallery section from the File Explorer sidepanel'
             }
         }
 
         Write-Output ""
 
-        if ($( Read-Host -Prompt "   ä»æ–‡ä»¶èµ„æºç®¡ç†å™¨ä¾§æ¿ä¸­éšè—é‡å¤çš„å¯ç§»åŠ¨é©±åŠ¨å™¨æ¡ç›®ï¼Œä»¥ä¾¿å®ƒä»¬ä»…æ˜¾ç¤ºåœ¨æ­¤PCä¸‹? (y/n)" ) -eq 'y') {
+        if ($( Read-Host -Prompt "   ´ÓÎÄ¼ş×ÊÔ´¹ÜÀíÆ÷²à°åÖĞÒş²ØÖØ¸´µÄ¿ÉÒÆ¶¯Çı¶¯Æ÷ÌõÄ¿£¬ÒÔ±ãËüÃÇ½öÏÔÊ¾ÔÚ´ËPCÏÂ? (y/n)" ) -eq 'y') {
             AddParameter 'HideDupliDrive' 'Hide duplicate removable drive entries from the File Explorer sidepanel'
         }
 
-        # ä»…æ˜¾ç¤º Windows 10 ç”¨æˆ·ç¦ç”¨è¿™äº›ç‰¹å®šæ–‡ä»¶å¤¹çš„é€‰é¡¹
+        # ½öÏÔÊ¾ Windows 10 ÓÃ»§½ûÓÃÕâĞ©ÌØ¶¨ÎÄ¼ş¼ĞµÄÑ¡Ïî
         if (get-ciminstance -query "select caption from win32_operatingsystem where caption like '%Windows 10%'") {
             Write-Output ""
 
-            if ($( Read-Host -Prompt "æ‚¨æƒ³ä»æ–‡ä»¶èµ„æºç®¡ç†å™¨ä¾§é¢æ¿ä¸­éšè—ä»»ä½•æ–‡ä»¶å¤¹å—? (y/n)" ) -eq 'y') {
+            if ($( Read-Host -Prompt "ÄúÏë´ÓÎÄ¼ş×ÊÔ´¹ÜÀíÆ÷²àÃæ°åÖĞÒş²ØÈÎºÎÎÄ¼ş¼ĞÂğ? (y/n)" ) -eq 'y') {
                 Write-Output ""
 
-                if ($( Read-Host -Prompt "   ä»æ–‡ä»¶èµ„æºç®¡ç†å™¨ä¾§é¢æ¿ä¸­éšè—OneDriveæ–‡ä»¶å¤¹? (y/n)" ) -eq 'y') {
+                if ($( Read-Host -Prompt "   ´ÓÎÄ¼ş×ÊÔ´¹ÜÀíÆ÷²àÃæ°åÖĞÒş²ØOneDriveÎÄ¼ş¼Ğ? (y/n)" ) -eq 'y') {
                     AddParameter 'HideOnedrive' 'Hide the OneDrive folder in the File Explorer sidepanel'
                 }
 
                 Write-Output ""
                 
-                if ($( Read-Host -Prompt "   ä»æ–‡ä»¶èµ„æºç®¡ç†å™¨ä¾§é¢æ¿ä¸­éšè—3Då¯¹è±¡æ–‡ä»¶å¤¹? (y/n)" ) -eq 'y') {
+                if ($( Read-Host -Prompt "   ´ÓÎÄ¼ş×ÊÔ´¹ÜÀíÆ÷²àÃæ°åÖĞÒş²Ø3D¶ÔÏóÎÄ¼ş¼Ğ? (y/n)" ) -eq 'y') {
                     AddParameter 'Hide3dObjects' "Hide the 3D objects folder under 'This pc' in File Explorer" 
                 }
                 
                 Write-Output ""
 
-                if ($( Read-Host -Prompt "   ä»æ–‡ä»¶èµ„æºç®¡ç†å™¨ä¾§é¢æ¿ä¸­éšè—éŸ³ä¹æ–‡ä»¶å¤¹? (y/n)" ) -eq 'y') {
+                if ($( Read-Host -Prompt "   ´ÓÎÄ¼ş×ÊÔ´¹ÜÀíÆ÷²àÃæ°åÖĞÒş²ØÒôÀÖÎÄ¼ş¼Ğ? (y/n)" ) -eq 'y') {
                     AddParameter 'HideMusic' "Hide the music folder under 'This pc' in File Explorer"
                 }
             }
         }
     }
 
-    # å¦‚æœé™éŸ³å‚æ•°å·²é€šè¿‡ï¼Œè¯·æŠ‘åˆ¶æç¤º
+    # Èç¹û¾²Òô²ÎÊıÒÑÍ¨¹ı£¬ÇëÒÖÖÆÌáÊ¾
     if (-not $Silent) {
         Write-Output ""
         Write-Output ""
         Write-Output ""
-        Write-Output "æŒ‰å›è½¦é”®ç¡®è®¤æ‚¨çš„é€‰æ‹©å¹¶æ‰§è¡Œè„šæœ¬ï¼Œæˆ–æŒ‰ CTRL+C é€€å‡º..."
+        Write-Output "°´»Ø³µ¼üÈ·ÈÏÄúµÄÑ¡Ôñ²¢Ö´ĞĞ½Å±¾£¬»ò°´ CTRL+C ÍË³ö..."
         Read-Host | Out-Null
     }
 
@@ -1577,7 +1575,7 @@ function ShowAppRemoval {
         Write-Output "You have selected $($script:SelectedApps.Count) apps for removal"
         AddParameter 'RemoveAppsCustom' "Remove $($script:SelectedApps.Count) apps:"
 
-        # å¦‚æœé™éŸ³å‚æ•°å·²é€šè¿‡ï¼Œè¯·æŠ‘åˆ¶æç¤º
+        # Èç¹û¾²Òô²ÎÊıÒÑÍ¨¹ı£¬ÇëÒÖÖÆÌáÊ¾
         if (-not $Silent) {
             Write-Output ""
             Write-Output ""
@@ -1597,16 +1595,16 @@ function LoadAndShowSavedSettings {
     PrintHeader 'Custom Mode'
     Write-Output "Win11Debloat will make the following changes:"
 
-    # ä»æ–‡ä»¶ä¸­æ‰“å°å·²ä¿å­˜çš„è®¾ç½®ä¿¡æ¯
+    # ´ÓÎÄ¼şÖĞ´òÓ¡ÒÑ±£´æµÄÉèÖÃĞÅÏ¢
     Foreach ($line in (Get-Content -Path "$PSScriptRoot/SavedSettings" )) { 
-        # åˆ é™¤è¡Œå‰åçš„ä»»ä½•ç©ºæ ¼
+        # É¾³ıĞĞÇ°ºóµÄÈÎºÎ¿Õ¸ñ
         $line = $line.Trim()
     
-        # æ£€æŸ¥è¯¥è¡Œæ˜¯å¦åŒ…å«æ³¨é‡Š
+        # ¼ì²é¸ÃĞĞÊÇ·ñ°üº¬×¢ÊÍ
         if (-not ($line.IndexOf('#') -eq -1)) {
             $parameterName = $line.Substring(0, $line.IndexOf('#'))
 
-            # æ‰“å°å‚æ•°æè¿°å¹¶å°†å‚æ•°æ·»åŠ åˆ°å‚æ•°åˆ—è¡¨ä¸­
+            # ´òÓ¡²ÎÊıÃèÊö²¢½«²ÎÊıÌí¼Óµ½²ÎÊıÁĞ±íÖĞ
             switch ($parameterName) {
                 'RemoveApps' {
                     PrintAppsList "$PSScriptRoot/Appslist.txt" $true
@@ -1625,11 +1623,11 @@ function LoadAndShowSavedSettings {
         }
     }
 
-    # å¦‚æœé™éŸ³å‚æ•°å·²é€šè¿‡ï¼Œè¯·æŠ‘åˆ¶æç¤º
+    # Èç¹û¾²Òô²ÎÊıÒÑÍ¨¹ı£¬ÇëÒÖÖÆÌáÊ¾
     if (-not $Silent) {
         Write-Output ""
         Write-Output ""
-        Write-Output "æŒ‰å›è½¦é”®æ‰§è¡Œè„šæœ¬æˆ–æŒ‰ CTRL+C é€€å‡º..."
+        Write-Output "°´»Ø³µ¼üÖ´ĞĞ½Å±¾»ò°´ CTRL+C ÍË³ö..."
         Read-Host | Out-Null
     }
 
@@ -1646,14 +1644,14 @@ function LoadAndShowSavedSettings {
 
 
 
-# æ£€æŸ¥ winget æ˜¯å¦å·²å®‰è£…,å¦‚æœæ˜¯.è¯·æ£€æŸ¥ç‰ˆæœ¬æ˜¯å¦è‡³å°‘ä¸º v1.4
+# ¼ì²é winget ÊÇ·ñÒÑ°²×°,Èç¹ûÊÇ.Çë¼ì²é°æ±¾ÊÇ·ñÖÁÉÙÎª v1.4
 if ((Get-AppxPackage -Name "*Microsoft.DesktopAppInstaller*") -and ([int](((winget -v) -replace 'v','').split('.')[0..1] -join '') -gt 14)) {
     $script:wingetInstalled = $true
 }
 else {
     $script:wingetInstalled = $false
 
-    # é¡¯ç¤ºéœ€è¦ä½¿ç”¨è€…ç¢ºèªçš„è­¦å‘Š,å¦‚æœæ²‰é»˜å¼•æ•¸å·²é€é,å‰‡æŠ‘åˆ¶ç¢ºèª
+    # ï@Ê¾ĞèÒªÊ¹ÓÃÕß´_ÕJµÄ¾¯¸æ,Èç¹û³ÁÄ¬Òı”µÒÑÍ¸ß^,„tÒÖÖÆ´_ÕJ
     if (-not $Silent) {
         Write-Warning "Winget is not installed or outdated. This may prevent Win11Debloat from removing certain apps."
         Write-Output ""
@@ -1662,10 +1660,10 @@ else {
     }
 }
 
-# è·å–å½“å‰çš„ Windows æ„å»ºç‰ˆæœ¬,ä»¥ä¾¿ä¸åŠŸèƒ½è¿›è¡Œæ¯”è¾ƒ
+# »ñÈ¡µ±Ç°µÄ Windows ¹¹½¨°æ±¾,ÒÔ±ãÓë¹¦ÄÜ½øĞĞ±È½Ï
 $WinVersion = Get-ItemPropertyValue 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion' CurrentBuild
 
-# æ£€æŸ¥æœºå™¨æ˜¯å¦æ”¯æŒç°ä»£å¾…æœº,è¿™ç”¨äºç¡®å®šæ˜¯å¦å¯ä»¥ä½¿ç”¨ DisableModernStandbyNetworking é€‰é¡¹
+# ¼ì²é»úÆ÷ÊÇ·ñÖ§³ÖÏÖ´ú´ı»ú,ÕâÓÃÓÚÈ·¶¨ÊÇ·ñ¿ÉÒÔÊ¹ÓÃ DisableModernStandbyNetworking Ñ¡Ïî
 $script:ModernStandbySupported = CheckModernStandbySupport
 
 $script:Params = $PSBoundParameters
@@ -1673,15 +1671,15 @@ $script:FirstSelection = $true
 $SPParams = 'WhatIf', 'Confirm', 'Verbose', 'Silent', 'Sysprep', 'Debug', 'User', 'CreateRestorePoint', 'LogPath'
 $SPParamCount = 0
 
-# è®¡ç®—å‚æ•°ä¸­å­˜åœ¨å¤šå°‘ä¸ª SP å‚æ•°
-# è¿™åæ¥ç”¨äºæ£€æŸ¥æ˜¯å¦é€‰æ‹©äº†ä»»ä½•é€‰é¡¹
+# ¼ÆËã²ÎÊıÖĞ´æÔÚ¶àÉÙ¸ö SP ²ÎÊı
+# ÕâºóÀ´ÓÃÓÚ¼ì²éÊÇ·ñÑ¡ÔñÁËÈÎºÎÑ¡Ïî
 foreach ($Param in $SPParams) {
     if ($script:Params.ContainsKey($Param)) {
         $SPParamCount++
     }
 }
 
-# éšè—åº”ç”¨ç¨‹åºåˆ é™¤çš„è¿›åº¦æ¡,å› ä¸ºå®ƒä»¬é˜»æ­¢äº† Win11Debloat çš„è¾“å‡º
+# Òş²ØÓ¦ÓÃ³ÌĞòÉ¾³ıµÄ½ø¶ÈÌõ,ÒòÎªËüÃÇ×èÖ¹ÁË Win11Debloat µÄÊä³ö
 if (-not ($script:Params.ContainsKey("Verbose"))) {
     $ProgressPreference = 'SilentlyContinue'
 }
@@ -1697,42 +1695,42 @@ else {
 if ($script:Params.ContainsKey("Sysprep")) {
     $defaultUserPath = GetUserDirectory -userName "Default"
 
-    # å¦‚æœåœ¨ Sysprep æ¨¡å¼ä¸‹è¿è¡Œ,é€€å‡ºè„šæœ¬ Windows 10
+    # Èç¹ûÔÚ Sysprep Ä£Ê½ÏÂÔËĞĞ,ÍË³ö½Å±¾ Windows 10
     if ($WinVersion -lt 22000) {
         Write-Host "Error: Win11Debloat Sysprep mode is not supported on Windows 10" -ForegroundColor Red
         AwaitKeyToExit
     }
 }
 
-# å¦‚æœæŒ‡å®šäº†ç”¨æˆ·,è¯·ç¡®ä¿æ»¡è¶³ç”¨æˆ·æ¨¡å¼çš„æ‰€æœ‰è¦æ±‚
+# Èç¹ûÖ¸¶¨ÁËÓÃ»§,ÇëÈ·±£Âú×ãÓÃ»§Ä£Ê½µÄËùÓĞÒªÇó
 if ($script:Params.ContainsKey("User")) {
     $userPath = GetUserDirectory -userName $script:Params.Item("User")
 }
 
-# å¦‚æœå·²ä¿å­˜çš„è®¾ç½®æ–‡ä»¶å­˜åœ¨ä¸”ä¸ºç©º,è¯·åˆ é™¤è¯¥æ–‡ä»¶
+# Èç¹ûÒÑ±£´æµÄÉèÖÃÎÄ¼ş´æÔÚÇÒÎª¿Õ,ÇëÉ¾³ı¸ÃÎÄ¼ş
 if ((Test-Path "$PSScriptRoot/SavedSettings") -and ([String]::IsNullOrWhiteSpace((Get-content "$PSScriptRoot/SavedSettings")))) {
     Remove-Item -Path "$PSScriptRoot/SavedSettings" -recurse
 }
 
-# ä»…å½“ "RunAppsListGenerator" å‚æ•°ä¼ é€’ç»™è„šæœ¬æ—¶,æ‰è¿è¡Œåº”ç”¨ç¨‹åºé€‰æ‹©è¡¨å•
+# ½öµ± "RunAppsListGenerator" ²ÎÊı´«µİ¸ø½Å±¾Ê±,²ÅÔËĞĞÓ¦ÓÃ³ÌĞòÑ¡Ôñ±íµ¥
 if ($RunAppConfigurator -or $RunAppsListGenerator) {
-    PrintHeader "è‡ªå®šä¹‰åº”ç”¨ç¨‹åºåˆ—è¡¨ç”Ÿæˆå™¨"
+    PrintHeader "×Ô¶¨ÒåÓ¦ÓÃ³ÌĞòÁĞ±íÉú³ÉÆ÷"
 
     $result = ShowAppSelectionForm
 
-    # æ ¹æ®åº”ç”¨ç¨‹åºé€‰æ‹©æ˜¯å¦å·²ä¿å­˜æˆ–å–æ¶ˆæ˜¾ç¤ºä¸åŒçš„æ¶ˆæ¯
+    # ¸ù¾İÓ¦ÓÃ³ÌĞòÑ¡ÔñÊÇ·ñÒÑ±£´æ»òÈ¡ÏûÏÔÊ¾²»Í¬µÄÏûÏ¢
     if ($result -ne [System.Windows.Forms.DialogResult]::OK) {
         Write-Host "Application selection window was closed without saving." -ForegroundColor Red
     }
     else {
-        Write-Output "æ‚¨çš„åº”ç”¨ç¨‹åºé€‰æ‹©å·²ä¿å­˜åˆ° "CustomAppsList" æ–‡ä»¶ä¸­ï¼Œè¯¥æ–‡ä»¶ä½äº:"
+        Write-Output "ÄúµÄÓ¦ÓÃ³ÌĞòÑ¡ÔñÒÑ±£´æµ½ "CustomAppsList" ÎÄ¼şÖĞ£¬¸ÃÎÄ¼şÎ»ÓÚ:"
         Write-Host "$PSScriptRoot" -ForegroundColor Yellow
     }
 
     AwaitKeyToExit
 }
 
-# æ ¹æ®æä¾›çš„å‚æ•°æˆ–ç”¨æˆ·è¾“å…¥æ›´æ”¹è„šæœ¬æ‰§è¡Œ
+# ¸ù¾İÌá¹©µÄ²ÎÊı»òÓÃ»§ÊäÈë¸ü¸Ä½Å±¾Ö´ĞĞ
 if ((-not $script:Params.Count) -or $RunDefaults -or $RunDefaultsLite -or $RunSavedSettings -or ($SPParamCount -eq $script:Params.Count)) {
     if ($RunDefaults -or $RunDefaultsLite) {
         $Mode = '1'
@@ -1750,63 +1748,63 @@ if ((-not $script:Params.Count) -or $RunDefaults -or $RunDefaultsLite -or $RunSa
         $Mode = ShowScriptMenuOptions 
     }
 
-    # æ ¹æ®æ¨¡å¼æ·»åŠ æ‰§è¡Œå‚æ•°
+    # ¸ù¾İÄ£Ê½Ìí¼ÓÖ´ĞĞ²ÎÊı
     switch ($Mode) {
-        # é»˜è®¤æ¨¡å¼ï¼ŒåŠ è½½é»˜è®¤å€¼å’Œåº”ç”¨ç¨‹åºåˆ é™¤é€‰é¡¹
+        # Ä¬ÈÏÄ£Ê½£¬¼ÓÔØÄ¬ÈÏÖµºÍÓ¦ÓÃ³ÌĞòÉ¾³ıÑ¡Ïî
         '1' { 
             ShowDefaultMode
         }
 
-        # è‡ªå®šä¹‰æ¨¡å¼ï¼Œæ˜¾ç¤ºç”¨æˆ·é€‰æ‹©çš„æ‰€æœ‰å¯ç”¨é€‰é¡¹
+        # ×Ô¶¨ÒåÄ£Ê½£¬ÏÔÊ¾ÓÃ»§Ñ¡ÔñµÄËùÓĞ¿ÉÓÃÑ¡Ïî
         '2' { 
             ShowCustomModeOptions
         }
 
-        # åˆ é™¤åº”ç”¨ç¨‹åºï¼Œæ ¹æ®ç”¨æˆ·é€‰æ‹©åˆ é™¤åº”ç”¨ç¨‹åº
+        # É¾³ıÓ¦ÓÃ³ÌĞò£¬¸ù¾İÓÃ»§Ñ¡ÔñÉ¾³ıÓ¦ÓÃ³ÌĞò
         '3' {
             ShowAppRemoval
         }
 
-        # ä» "SavedSettings" æ–‡ä»¶ä¸­åŠ è½½ä¸Šæ¬¡ä½¿ç”¨çš„è‡ªå®šä¹‰é€‰é¡¹
+        # ´Ó "SavedSettings" ÎÄ¼şÖĞ¼ÓÔØÉÏ´ÎÊ¹ÓÃµÄ×Ô¶¨ÒåÑ¡Ïî
         '4' {
             LoadAndShowSavedSettings
         }
     }
 }
 else {
-    PrintHeader 'è‡ªå®šä¹‰æ¨¡å¼'
+    PrintHeader '×Ô¶¨ÒåÄ£Ê½'
 }
 
-# å¦‚æœ SPParams ä¸­çš„é”®æ•°ç­‰äº Params ä¸­çš„é”®æ•°,åˆ™æœªé€‰æ‹©ä¿®æ”¹/æ›´æ”¹
-#  æˆ–ç”±ç”¨æˆ·æ·»åŠ ,è„šæœ¬å¯ä»¥åœ¨ä¸è¿›è¡Œä»»ä½•æ›´æ”¹çš„æƒ…å†µä¸‹é€€å‡º.
+# Èç¹û SPParams ÖĞµÄ¼üÊıµÈÓÚ Params ÖĞµÄ¼üÊı,ÔòÎ´Ñ¡ÔñĞŞ¸Ä/¸ü¸Ä
+#  »òÓÉÓÃ»§Ìí¼Ó,½Å±¾¿ÉÒÔÔÚ²»½øĞĞÈÎºÎ¸ü¸ÄµÄÇé¿öÏÂÍË³ö.
 if (($SPParamCount -eq $script:Params.Keys.Count) -or (($script:Params.Keys.Count -eq 1) -and ($script:Params.Keys -contains 'CreateRestorePoint'))) {
     Write-Output "The script completed without making any changes."
 
     AwaitKeyToExit
 }
 
-# å¦‚æœä¼ é€’äº† CreateRestorePoint å‚æ•°,åˆ™åˆ›å»ºç³»ç»Ÿæ¢å¤ç‚¹
-if ($script:Params.ContainsKey("åˆ›å»ºæ¢å¤ç‚¹")) {
+# Èç¹û´«µİÁË CreateRestorePoint ²ÎÊı,Ôò´´½¨ÏµÍ³»Ö¸´µã
+if ($script:Params.ContainsKey("´´½¨»Ö¸´µã")) {
     CreateSystemRestorePoint
 }
 
-# æ‰§è¡Œæ‰€æœ‰é€‰å®š/æä¾›çš„å‚æ•°
+# Ö´ĞĞËùÓĞÑ¡¶¨/Ìá¹©µÄ²ÎÊı
 switch ($script:Params.Keys) {
     'RemoveApps' {
         $appsList = ReadAppslistFromFile "$PSScriptRoot/Appslist.txt" 
-        Write-Output "> åˆ é™¤é»˜è®¤é€‰æ‹© $($appsList.Count) apps..."
+        Write-Output "> É¾³ıÄ¬ÈÏÑ¡Ôñ $($appsList.Count) apps..."
         RemoveApps $appsList
         continue
     }
     'RemoveAppsCustom' {
         if (-not (Test-Path "$PSScriptRoot/CustomAppsList")) {
-            Write-Host "> é”™è¯¯: æ— æ³•ä»æ–‡ä»¶ä¸­åŠ è½½è‡ªå®šä¹‰åº”ç”¨ç¨‹åºåˆ—è¡¨ï¼Œæ²¡æœ‰åˆ é™¤ä»»ä½•åº”ç”¨ç¨‹åº" -ForegroundColor Red
+            Write-Host "> ´íÎó: ÎŞ·¨´ÓÎÄ¼şÖĞ¼ÓÔØ×Ô¶¨ÒåÓ¦ÓÃ³ÌĞòÁĞ±í£¬Ã»ÓĞÉ¾³ıÈÎºÎÓ¦ÓÃ³ÌĞò" -ForegroundColor Red
             Write-Output ""
             continue
         }
         
         $appsList = ReadAppslistFromFile "$PSScriptRoot/CustomAppsList"
-        Write-Output "> ç§»é™¤ $($appsList.Count) apps..."
+        Write-Output "> ÒÆ³ı $($appsList.Count) apps..."
         RemoveApps $appsList
         continue
     }
@@ -1818,13 +1816,13 @@ switch ($script:Params.Keys) {
     }
     'RemoveW11Outlook' {
         $appsList = 'Microsoft.OutlookForWindows'
-        Write-Output "> åˆ é™¤æ–°çš„ Windows ç‰ˆ Outlook åº”ç”¨ç¨‹åº..."
+        Write-Output "> É¾³ıĞÂµÄ Windows °æ Outlook Ó¦ÓÃ³ÌĞò..."
         RemoveApps $appsList
         continue
     }
     'RemoveGamingApps' {
         $appsList = 'Microsoft.GamingApp', 'Microsoft.XboxGameOverlay', 'Microsoft.XboxGamingOverlay'
-        Write-Output "> ç§»é™¤ä¸æ¸¸æˆç›¸å…³çš„åº”ç”¨ç¨‹åº..."
+        Write-Output "> ÒÆ³ıÓëÓÎÏ·Ïà¹ØµÄÓ¦ÓÃ³ÌĞò..."
         RemoveApps $appsList
         continue
     }
@@ -2117,6 +2115,6 @@ RestartExplorer
 Write-Output ""
 Write-Output ""
 Write-Output ""
-Write-Output "è„šæœ¬å®Œæˆ! è¯·æ£€æŸ¥ä¸Šé¢æ˜¯å¦æœ‰ä»»ä½•é”™è¯¯."
+Write-Output "½Å±¾Íê³É! Çë¼ì²éÉÏÃæÊÇ·ñÓĞÈÎºÎ´íÎó."
 
 AwaitKeyToExit
