@@ -483,7 +483,6 @@ function ForceRemoveEdge {
             "$env:USERPROFILE\Desktop\Microsoft Edge.lnk",
             "$edgeStub"
         )
-
         foreach ($path in $edgePaths) {
             if (Test-Path -Path $path) {
                 Remove-Item -Path $path -Force -Recurse -ErrorAction SilentlyContinue
@@ -700,7 +699,6 @@ function ReplaceStartMenuForAllUsers {
     Write-Output "替换了默认用户配置文件的开始菜单"
     Write-Output ""
 }
-
 
 # 替换所有用户的开始菜单，当使用默认的开始菜单模板时，这会清除所有固定的应用程序
 # Credit: https://lazyadmin.nl/win-11/customize-windows-11-start-menu-layout/
@@ -1049,7 +1047,6 @@ function ShowDefaultMode {
         }
     }
 }
-
 
 function ShowDefaultModeAppRemovalOptions {
     PrintHeader '默认模式'
